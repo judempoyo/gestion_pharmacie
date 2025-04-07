@@ -1,10 +1,10 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\Customer;
+use App\Models\Supplier;
 use App\Core\ViewRenderer;
 
-class CustomerController
+class SupplierController
 {
     use ViewRenderer;
     protected $basePath;
@@ -32,10 +32,10 @@ class CustomerController
         }
     
         // Pagination avec tri
-        $customers = Customer::orderBy($sort, $direction)->paginate($perPage);
+        $suppliers = Supplier::orderBy($sort, $direction)->paginate($perPage);
     
-        $this->render('app', 'customers/index', [
-            'customers' => $customers,
+        $this->render('app', 'suppliers/index', [
+            'suppliers' => $suppliers,
             'title' => 'Liste des clients',
             'sort' => $sort,
             'direction' => $direction,
@@ -43,7 +43,7 @@ class CustomerController
     }
     public function create()
     {
-        $this->render('app', 'customers/create', [
+        $this->render('app', 'suppliers/create', [
             'title' => 'Ajouter un client'
         ]);
     }
@@ -68,20 +68,20 @@ class CustomerController
         }
 
 
-        Customer::create($data);
+        Supplier::create($data);
 
         $_SESSION['flash'] = [
             'type' => 'success',
             'message' => 'Client créé avec succès'
         ];
-        header('Location: ' . $this->basePath . '/customer');
+        header('Location: ' . $this->basePath . '/supplier');
     }
 
     public function edit($id)
     {
         
-        $customer = Customer::where('id', $id)->first();
-        if (!$customer) {
+        $supplier = Supplier::where('id', $id)->first();
+        if (!$supplier) {
             http_response_code(404);
             echo "Client non trouvé";
             return;
@@ -89,8 +89,8 @@ class CustomerController
 
 
 
-        $this->render('app', 'customers/edit', [
-            'customer' => $customer,
+        $this->render('app', 'suppliers/edit', [
+            'supplier' => $supplier,
             'title' => 'Modifier le client'
         ]);
     }
@@ -98,9 +98,9 @@ class CustomerController
     public function update($id)
     {
       
-        $customer = Customer::where('id', $id)->first();
+        $supplier = Supplier::where('id', $id)->first();
 
-        if (!$customer) {
+        if (!$supplier) {
             http_response_code(404);
             echo "Client non trouvé";
             return;
@@ -123,41 +123,41 @@ class CustomerController
         }
 
 
-        $customer->update($data);
+        $supplier->update($data);
         $_SESSION['flash'] = [
             'type' => 'success',
             'message' => 'Client modifié avec succès'
         ];
-        header('Location: ' . $this->basePath . '/customer');
+        header('Location: ' . $this->basePath . '/supplier');
     }
 
     public function delete($id)
     {
-        //$customer = Customer::find($id);
-        $customer = Customer::where('id', $id)->first();
+        //$supplier = Supplier::find($id);
+        $supplier = Supplier::where('id', $id)->first();
         
-        if (!$customer) {
+        if (!$supplier) {
             http_response_code(404);
             echo "Client non trouvé";
             return;
         }
 
-        $customer->delete();
+        $supplier->delete();
         $_SESSION['flash'] = [
             'type' => 'success',
             'message' => 'Client supprimé avec succès'
         ];
-        header('Location: ' . $this->basePath . '/customer');
+        header('Location: ' . $this->basePath . '/supplier');
     }
 
     public function export()
 {
-    $customers = Customer::all();
+    $suppliers = Supplier::all();
 
     // En-têtes du fichier CSV
     $headers = [
         'Content-Type' => 'text/csv',
-        'Content-Disposition' => 'attachment; filename="customers.csv"',
+        'Content-Disposition' => 'attachment; filename="suppliers.csv"',
     ];
 
     // Ouvrir un flux de sortie pour le fichier CSV
@@ -167,8 +167,8 @@ class CustomerController
     fputcsv($output, ['ID', 'Nom', 'Téléphone']);
 
     // Écrire les données des clients
-    foreach ($customers as $customer) {
-        fputcsv($output, [$customer->id, $customer->name, $customer->phone]);
+    foreach ($suppliers as $supplier) {
+        fputcsv($output, [$supplier->id, $supplier->name, $supplier->phone]);
     }
 
     // Fermer le flux de sortie
@@ -176,7 +176,7 @@ class CustomerController
 
     // Envoyer les en-têtes et le fichier CSV
     header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="customers.csv"');
+    header('Content-Disposition: attachment; filename="suppliers.csv"');
     exit();
 }
    

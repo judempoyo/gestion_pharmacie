@@ -1,5 +1,6 @@
 <?php
 
+//namespace App\Config;
 
 require_once dirname(__DIR__) . '/../vendor/autoload.php';
 
@@ -8,14 +9,13 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 // Configuration de base
 define('BASE_PATH', realpath(__DIR__ . '/..'));
 define('PUBLIC_PATH', BASE_PATH . '/public/');
-define('PUBLIC_URL', 'http://jump.localhost/Projets/KongB/public/');
+define('PUBLIC_URL', 'http://jump.localhost/Projets/gestion_pharmacie/public/');
 
 
 
 use FastRoute\RouteCollector;
-use App\Controllers\PhotoController;
 use App\Controllers\CustomerController;
-use App\Controllers\BookingController;
+use App\Controllers\SupplierController;
 use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use Illuminate\Pagination\Paginator;
@@ -29,7 +29,7 @@ Paginator::currentPageResolver(function ($pageName = 'page') {
     return isset($_GET[$pageName]) ? $_GET[$pageName] : 1;
 });
 
-$basePath = '/Projets/KongB/public'; // Chemin de base de votre projet
+$basePath = '/Projets/gestion_pharmacie/public'; // Chemin de base de votre projet
 
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
@@ -37,9 +37,7 @@ $dotenv->load();
 
 // Ajouter le chemin de base à vos routes
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($basePath) {
-  $r->addRoute('GET', $basePath . '/photo', [PhotoController::class, 'index']);
-  $r->addRoute('GET', $basePath . '/photo/create', [PhotoController::class, 'create']);
-  $r->addRoute('POST', $basePath . '/photo/store', [PhotoController::class, 'store']);
+  
 
   $r->addRoute('GET', $basePath . '/customer', [CustomerController::class, 'index']);
   $r->addRoute('GET', $basePath . '/customer/create', [CustomerController::class, 'create']);
@@ -49,12 +47,13 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($base
   $r->addRoute('POST', $basePath . '/customer/update/{id:\d+}', [CustomerController::class, 'update']);
   $r->addRoute('POST', $basePath . '/customer/delete/{id:\d+}', [CustomerController::class, 'delete']);
 
-  $r->addRoute('GET', $basePath . '/booking', [BookingController::class, 'index']);
-  $r->addRoute('GET', $basePath . '/booking/create', [BookingController::class, 'create']);
-  $r->addRoute('POST', $basePath . '/booking/store', [BookingController::class, 'store']);
-  $r->addRoute('GET', $basePath . '/booking/edit/{id:\d+}', [BookingController::class, 'edit']);
-  $r->addRoute('POST', $basePath . '/booking/update/{id:\d+}', [BookingController::class, 'update']);
-  $r->addRoute('GET', $basePath . '/booking/delete/{id:\d+}', [BookingController::class, 'delete']);
+  $r->addRoute('GET', $basePath . '/supplier', [SupplierController::class, 'index']);
+  $r->addRoute('GET', $basePath . '/supplier/create', [SupplierController::class, 'create']);
+  $r->addRoute('POST', $basePath . '/supplier/store', [SupplierController::class, 'store']);
+  $r->addRoute('GET', $basePath . '/supplier/export', [SupplierController::class, 'export']);
+  $r->addRoute('GET', $basePath . '/supplier/edit/{id:\d+}', [SupplierController::class, 'edit']);
+  $r->addRoute('POST', $basePath . '/supplier/update/{id:\d+}', [SupplierController::class, 'update']);
+  $r->addRoute('POST', $basePath . '/supplier/delete/{id:\d+}', [SupplierController::class, 'delete']);
 
   $r->addRoute('GET', $basePath . '/', [AuthController::class, 'showLoginForm']);
   $r->addRoute('GET', $basePath . '/login', [AuthController::class, 'showLoginForm']);

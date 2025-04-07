@@ -13,7 +13,6 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
-
 switch ($routeInfo[0]) {
     case Dispatcher::FOUND:
         $handler = $routeInfo[1];
