@@ -1,5 +1,6 @@
 <?php
 
+//namespace App\Config;
 
 require_once dirname(__DIR__) . '/../vendor/autoload.php';
 
@@ -13,9 +14,7 @@ define('PUBLIC_URL', 'http://jump.localhost/Projets/KongB/public/');
 
 
 use FastRoute\RouteCollector;
-use App\Controllers\PhotoController;
 use App\Controllers\CustomerController;
-use App\Controllers\BookingController;
 use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use Illuminate\Pagination\Paginator;
@@ -29,7 +28,7 @@ Paginator::currentPageResolver(function ($pageName = 'page') {
     return isset($_GET[$pageName]) ? $_GET[$pageName] : 1;
 });
 
-$basePath = '/Projets/KongB/public'; // Chemin de base de votre projet
+$basePath = '/Projets/gestion_pharmacie/public'; // Chemin de base de votre projet
 
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
@@ -46,13 +45,6 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($base
   $r->addRoute('GET', $basePath . '/customer/edit/{id:\d+}', [CustomerController::class, 'edit']);
   $r->addRoute('POST', $basePath . '/customer/update/{id:\d+}', [CustomerController::class, 'update']);
   $r->addRoute('POST', $basePath . '/customer/delete/{id:\d+}', [CustomerController::class, 'delete']);
-
-  $r->addRoute('GET', $basePath . '/booking', [BookingController::class, 'index']);
-  $r->addRoute('GET', $basePath . '/booking/create', [BookingController::class, 'create']);
-  $r->addRoute('POST', $basePath . '/booking/store', [BookingController::class, 'store']);
-  $r->addRoute('GET', $basePath . '/booking/edit/{id:\d+}', [BookingController::class, 'edit']);
-  $r->addRoute('POST', $basePath . '/booking/update/{id:\d+}', [BookingController::class, 'update']);
-  $r->addRoute('GET', $basePath . '/booking/delete/{id:\d+}', [BookingController::class, 'delete']);
 
   $r->addRoute('GET', $basePath . '/', [AuthController::class, 'showLoginForm']);
   $r->addRoute('GET', $basePath . '/login', [AuthController::class, 'showLoginForm']);
