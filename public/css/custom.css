@@ -1,0 +1,37 @@
+#wrapper.sidebar-mini #sidebar .sidebar-text {
+  display: none;
+}
+
+#wrapper:not(.sidebar-mini) #sidebar .sidebar-text {
+  display: block;
+}
+
+#wrapper.sidebar-mini .toggle-button .sidebar-mini-icon {
+  display: block;
+}
+
+#wrapper:not(.sidebar-mini) .toggle-button .sidebar-mini-icon {
+  display: none;
+}
+
+#wrapper.sidebar-mini .toggle-button .sidebar-icon {
+  display: none;
+}
+
+
+#wrapper:not(.sidebar-mini) .toggle-button .sidebar-icon {
+  display: block;
+}
+
+#sidebar {
+  transition: width 0.3s ease;
+}
+
+.toggle-button {
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-text {
+  transition: opacity 0.3s ease;
+}
+
