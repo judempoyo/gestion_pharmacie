@@ -42,10 +42,8 @@ class AuthController
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
-        $users = User::all();
 
-        var_dump($users);
-        die;
+
         try {
             $user = User::where('email', $email)->first();
 
