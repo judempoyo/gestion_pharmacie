@@ -11,7 +11,7 @@ class CustomerController
 
     public function __construct()
     {
-        $this->basePath = '/Projets/KongB/public';
+        $this->basePath = '/Projets/gestion_pharmacie/public';
     }
 
     public function index()

@@ -19,7 +19,7 @@ class AuthController
     {
         $this->session = new SessionManager();
         $this->session->start();
-        $this->basePath = '/Projets/KongB/public';
+        $this->basePath = '/Projets/gestion_pharmacie/public';
     }
 
     // Afficher le formulaire de connexion
@@ -42,6 +42,10 @@ class AuthController
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
+        $users = User::all();
+
+        var_dump($users);
+        die;
         try {
             $user = User::where('email', $email)->first();
 

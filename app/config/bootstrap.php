@@ -9,7 +9,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 // Configuration de base
 define('BASE_PATH', realpath(__DIR__ . '/..'));
 define('PUBLIC_PATH', BASE_PATH . '/public/');
-define('PUBLIC_URL', 'http://jump.localhost/Projets/KongB/public/');
+define('PUBLIC_URL', 'http://jump.localhost/Projets/gestion_pharmacie/public/');
 
 
 
