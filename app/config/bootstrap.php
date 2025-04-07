@@ -37,9 +37,7 @@ $dotenv->load();
 
 // Ajouter le chemin de base à vos routes
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($basePath) {
-  $r->addRoute('GET', $basePath . '/photo', [PhotoController::class, 'index']);
-  $r->addRoute('GET', $basePath . '/photo/create', [PhotoController::class, 'create']);
-  $r->addRoute('POST', $basePath . '/photo/store', [PhotoController::class, 'store']);
+  
 
   $r->addRoute('GET', $basePath . '/customer', [CustomerController::class, 'index']);
   $r->addRoute('GET', $basePath . '/customer/create', [CustomerController::class, 'create']);
