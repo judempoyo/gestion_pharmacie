@@ -15,6 +15,7 @@ define('PUBLIC_URL', 'http://jump.localhost/Projets/gestion_pharmacie/public/');
 
 use FastRoute\RouteCollector;
 use App\Controllers\CustomerController;
+use App\Controllers\SupplierController;
 use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use Illuminate\Pagination\Paginator;
@@ -45,6 +46,14 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($base
   $r->addRoute('GET', $basePath . '/customer/edit/{id:\d+}', [CustomerController::class, 'edit']);
   $r->addRoute('POST', $basePath . '/customer/update/{id:\d+}', [CustomerController::class, 'update']);
   $r->addRoute('POST', $basePath . '/customer/delete/{id:\d+}', [CustomerController::class, 'delete']);
+
+  $r->addRoute('GET', $basePath . '/supplier', [SupplierController::class, 'index']);
+  $r->addRoute('GET', $basePath . '/supplier/create', [SupplierController::class, 'create']);
+  $r->addRoute('POST', $basePath . '/supplier/store', [SupplierController::class, 'store']);
+  $r->addRoute('GET', $basePath . '/supplier/export', [SupplierController::class, 'export']);
+  $r->addRoute('GET', $basePath . '/supplier/edit/{id:\d+}', [SupplierController::class, 'edit']);
+  $r->addRoute('POST', $basePath . '/supplier/update/{id:\d+}', [SupplierController::class, 'update']);
+  $r->addRoute('POST', $basePath . '/supplier/delete/{id:\d+}', [SupplierController::class, 'delete']);
 
   $r->addRoute('GET', $basePath . '/', [AuthController::class, 'showLoginForm']);
   $r->addRoute('GET', $basePath . '/login', [AuthController::class, 'showLoginForm']);
