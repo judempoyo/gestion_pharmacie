@@ -69,7 +69,7 @@ class PurchaseController
         // Validation de base
         if (empty($_POST['supplier_id'])) {
             http_response_code(400);
-            echo "Le client est obligatoire";
+            echo "Le fournisseur est obligatoire";
             return;
         }
 
