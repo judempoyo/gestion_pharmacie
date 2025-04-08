@@ -16,6 +16,7 @@ define('PUBLIC_URL', 'http://jump.localhost/Projets/gestion_pharmacie/public/');
 use FastRoute\RouteCollector;
 use App\Controllers\CustomerController;
 use App\Controllers\InvoiceController;
+use App\Controllers\PurchaseController;
 use App\Controllers\ProductController;
 use App\Controllers\SupplierController;
 use App\Controllers\AuthController;
@@ -58,6 +59,16 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($base
   $r->addRoute('GET', $basePath . '/invoice/print/{id:\d+}', [InvoiceController::class, 'print']);
   $r->addRoute('POST', $basePath . '/invoice/update/{id:\d+}', [InvoiceController::class, 'update']);
   $r->addRoute('POST', $basePath . '/invoice/delete/{id:\d+}', [InvoiceController::class, 'delete']);
+
+  $r->addRoute('GET', $basePath . '/purchase', [PurchaseController::class, 'index']);
+  $r->addRoute('GET', $basePath . '/purchase/create', [PurchaseController::class, 'create']);
+  $r->addRoute('POST', $basePath . '/purchase/store', [PurchaseController::class, 'store']);
+  $r->addRoute('GET', $basePath . '/purchase/export', [PurchaseController::class, 'export']);
+  $r->addRoute('GET', $basePath . '/purchase/edit/{id:\d+}', [PurchaseController::class, 'edit']);
+  $r->addRoute('GET', $basePath . '/purchase/show/{id:\d+}', [PurchaseController::class, 'show']);
+  $r->addRoute('GET', $basePath . '/purchase/print/{id:\d+}', [PurchaseController::class, 'print']);
+  $r->addRoute('POST', $basePath . '/purchase/update/{id:\d+}', [PurchaseController::class, 'update']);
+  $r->addRoute('POST', $basePath . '/purchase/delete/{id:\d+}', [PurchaseController::class, 'delete']);
 
   $r->addRoute('GET', $basePath . '/supplier', [SupplierController::class, 'index']);
   $r->addRoute('GET', $basePath . '/supplier/create', [SupplierController::class, 'create']);
