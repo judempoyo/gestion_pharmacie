@@ -133,20 +133,15 @@ class AuthController
     }
 
     // Tableau de bord
-    public function dashboard()
+    /* public function dashboard()
     {
-        /* if (!$this->session->has('user')) {
-            $this->session->set('error', 'Vous devez être connecté pour accéder au tableau de bord.');
-            header('Location: ' . $this->basePath . '/login');
-            exit();
-        } */
-
+        
         $user = User::find($this->session->get('user'));
         $this->render('app', 'auth/dashboard', [
             'title' => 'Tableau de bord',
             'user' => $user
         ]);
-    }
+    } */
 
     // Afficher le formulaire de demande de réinitialisation du mot de passe
     public function showForgotPasswordForm()

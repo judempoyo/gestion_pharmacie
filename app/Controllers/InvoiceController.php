@@ -114,7 +114,11 @@ class InvoiceController
 
     public function show($id)
     {
-        $invoice = Invoice::with(['customer', 'invoiceLines.product'])->find($id);
+        
+
+        $invoiceId = is_array($id) ? ($id['id'] ?? null) : $id;
+    
+        $invoice = Invoice::with(['customer', 'invoiceLines.product'])->find($invoiceId);
         
         if (!$invoice) {
             http_response_code(404);
@@ -130,7 +134,8 @@ class InvoiceController
 
     public function edit($id)
     {
-        $invoice = Invoice::with(['invoiceLines.product'])->find($id);
+        $invoiceId = is_array($id) ? ($id['id'] ?? null) : $id;
+        $invoice = Invoice::with(['invoiceLines.product'])->find($invoiceId);
         $customers = Customer::all();
         $products = Product::all();
 
@@ -229,18 +234,23 @@ class InvoiceController
     }
 
     public function print($id)
-    {
-        $invoice = Invoice::with(['customer', 'invoiceLines.product'])->find($id);
-        
-        if (!$invoice) {
-            http_response_code(404);
-            echo "Facture non trouvée";
-            return;
-        }
-
-        $this->render('app', 'invoices/print', [
-            'invoice' => $invoice,
-            'title' => 'Facture #' . $invoice->id
-        ], false); // false pour ne pas utiliser le layout
+{
+    
+    $invoiceId = is_array($id) ? ($id['id'] ?? null) : $id;
+    
+    $invoice = Invoice::with(['customer', 'invoiceLines.product'])->find($invoiceId);
+    
+    if (!$invoice) {
+        http_response_code(404);
+        echo "Facture non trouvée";
+        return;
     }
+
+    $this->render('app', 'invoices/print', [
+        'invoice' => $invoice,
+        'title' => 'Facture #' . $invoice->id
+    ], false); // false pour ne pas utiliser le layout
+}
+
+   
 }

@@ -69,7 +69,7 @@ class PurchaseController
         // Validation de base
         if (empty($_POST['supplier_id'])) {
             http_response_code(400);
-            echo "Le client est obligatoire";
+            echo "Le fournisseur est obligatoire";
             return;
         }
 
@@ -114,7 +114,9 @@ class PurchaseController
 
     public function show($id)
     {
-        $purchase = Purchase::with(['supplier', 'purchaseLines.product'])->find($id);
+        $purchaseId = is_array($id) ? ($id['id'] ?? null) : $id;
+    
+        $purchase = Purchase::with(['supplier', 'purchaseLines.product'])->find($purchaseId);
         
         if (!$purchase) {
             http_response_code(404);
@@ -130,7 +132,9 @@ class PurchaseController
 
     public function edit($id)
     {
-        $purchase = Purchase::with(['purchaseLines.product'])->find($id);
+        $purchaseId = is_array($id) ? ($id['id'] ?? null) : $id;
+
+        $purchase = Purchase::with(['purchaseLines.product'])->find($purchaseId);
         $suppliers = Supplier::all();
         $products = Product::all();
 
@@ -230,7 +234,9 @@ class PurchaseController
 
     public function print($id)
     {
-        $purchase = Purchase::with(['supplier', 'purchaseLines.product'])->find($id);
+        $purchaseId = is_array($id) ? ($id['id'] ?? null) : $id;
+    
+        $purchase = Purchase::with(['supplier', 'purchaseLines.product'])->find($purchaseId);
         
         if (!$purchase) {
             http_response_code(404);

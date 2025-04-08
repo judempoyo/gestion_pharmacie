@@ -9,7 +9,7 @@ class Purchase extends Model
     protected $table = 'purchases';
 
     protected $fillable = [
-        'Supplier_id',
+        'supplier_id',
         'total_amount',
     ];
 
