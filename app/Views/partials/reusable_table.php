@@ -94,7 +94,7 @@ $modelName = $modelName ?? 'default';
                 <?php if ($data && $data->count() > 0): ?>
                     <?php foreach ($data as $item): ?>
                         <tr
-                            class="transition duration-500 hover:bg-gray-50 dark:hover:bg-gray-800 animate__animated animate__fadeIn">
+                            class="z-10 transition duration-500 hover:bg-gray-50 dark:hover:bg-gray-800 animate__animated animate__fadeIn">
                             <?php foreach ($columns as $column): ?>
                                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                                     <?= $item[$column['key']] ?>
