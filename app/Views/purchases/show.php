@@ -25,7 +25,7 @@
         <div class="p-4 border rounded dark:border-gray-600">
             <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Facture</h3>
             <p class="text-gray-700 dark:text-gray-300">Numéro: <?= $purchase->id ?></p>
-            <p class="text-gray-700 dark:text-gray-300">Total: <?= number_format($purchase->total_amount, 2) ?> €</p>
+            <p class="text-gray-700 dark:text-gray-300">Total: <?= number_format($purchase->total_amount, 2) ?> FC</p>
         </div>
     </div>
 
@@ -46,16 +46,16 @@
                     <?php foreach ($purchase->purchaseLines as $line): ?>
                     <tr class="border-b dark:border-gray-600">
                         <td class="p-3"><?= htmlspecialchars($line->product->designation) ?></td>
-                        <td class="p-3 text-right"><?= number_format($line->unit_price, 2) ?> €</td>
+                        <td class="p-3 text-right"><?= number_format($line->unit_price, 2) ?> FC</td>
                         <td class="p-3 text-right"><?= $line->quantity ?></td>
-                        <td class="p-3 text-right"><?= number_format($line->unit_price * $line->quantity, 2) ?> €</td>
+                        <td class="p-3 text-right"><?= number_format($line->unit_price * $line->quantity, 2) ?> FC</td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
                 <tfoot>
                     <tr class="font-bold bg-gray-100 dark:bg-gray-700">
                         <td class="p-3" colspan="3">Total</td>
-                        <td class="p-3 text-right"><?= number_format($purchase->total_amount, 2) ?> €</td>
+                        <td class="p-3 text-right"><?= number_format($purchase->total_amount, 2) ?> FC</td>
                     </tr>
                 </tfoot>
             </table>
