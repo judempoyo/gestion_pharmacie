@@ -36,7 +36,7 @@ class SupplierController
     
         $this->render('app', 'suppliers/index', [
             'suppliers' => $suppliers,
-            'title' => 'Liste des clients',
+            'title' => 'Liste des fournisseurs',
             'sort' => $sort,
             'direction' => $direction,
         ]);
@@ -44,7 +44,7 @@ class SupplierController
     public function create()
     {
         $this->render('app', 'suppliers/create', [
-            'title' => 'Ajouter un client'
+            'title' => 'Ajouter un fournisseur'
         ]);
     }
 
@@ -72,7 +72,7 @@ class SupplierController
 
         $_SESSION['flash'] = [
             'type' => 'success',
-            'message' => 'Client créé avec succès'
+            'message' => 'fournisseur créé avec succès'
         ];
         header('Location: ' . $this->basePath . '/supplier');
     }
@@ -83,7 +83,7 @@ class SupplierController
         $supplier = Supplier::where('id', $id)->first();
         if (!$supplier) {
             http_response_code(404);
-            echo "Client non trouvé";
+            echo "fournisseur non trouvé";
             return;
         }
 
@@ -91,7 +91,7 @@ class SupplierController
 
         $this->render('app', 'suppliers/edit', [
             'supplier' => $supplier,
-            'title' => 'Modifier le client'
+            'title' => 'Modifier le fournisseur'
         ]);
     }
 
@@ -102,7 +102,7 @@ class SupplierController
 
         if (!$supplier) {
             http_response_code(404);
-            echo "Client non trouvé";
+            echo "fournisseur non trouvé";
             return;
         }
 
@@ -126,7 +126,7 @@ class SupplierController
         $supplier->update($data);
         $_SESSION['flash'] = [
             'type' => 'success',
-            'message' => 'Client modifié avec succès'
+            'message' => 'fournisseur modifié avec succès'
         ];
         header('Location: ' . $this->basePath . '/supplier');
     }
@@ -138,14 +138,14 @@ class SupplierController
         
         if (!$supplier) {
             http_response_code(404);
-            echo "Client non trouvé";
+            echo "fournisseur non trouvé";
             return;
         }
 
         $supplier->delete();
         $_SESSION['flash'] = [
             'type' => 'success',
-            'message' => 'Client supprimé avec succès'
+            'message' => 'fournisseur supprimé avec succès'
         ];
         header('Location: ' . $this->basePath . '/supplier');
     }
@@ -166,7 +166,7 @@ class SupplierController
     // Écrire les en-têtes du CSV
     fputcsv($output, ['ID', 'Nom', 'Téléphone']);
 
-    // Écrire les données des clients
+    // Écrire les données des fournisseurs
     foreach ($suppliers as $supplier) {
         fputcsv($output, [$supplier->id, $supplier->name, $supplier->phone]);
     }
