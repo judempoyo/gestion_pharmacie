@@ -13,13 +13,13 @@ $modelName = $modelName ?? 'default';
 ?>
 
 <div
-    class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-full mx-auto mt-8 animate__animated animate__fadeIn">
+    class="max-w-full p-6 mx-auto mt-8 bg-white rounded-lg shadow-lg dark:bg-gray-800 animate__animated animate__fadeIn">
     <!-- Titre et bouton d'ajout -->
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex items-center justify-between mb-6">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white animate__animated animate__fadeInLeft"><?= $title ?>
         </h1>
         <a href="<?= $createUrl ?>"
-            class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 transition duration-500 ease-in-out transform hover:scale-105 animate__animated animate__fadeInRight">
+            class="px-4 py-2 text-white transition duration-500 ease-in-out transform bg-teal-500 rounded hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 hover:scale-105 animate__animated animate__fadeInRight">
             Ajouter
         </a>
     </div>
@@ -29,7 +29,7 @@ $modelName = $modelName ?? 'default';
         <div class="mb-6 animate__animated animate__fadeInUp">
             <!-- Bouton pour afficher/masquer les filtres -->
             <button onclick="toggleFilters()"
-                class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 transition duration-500 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                class="px-4 py-2 text-white transition duration-500 ease-in-out transform bg-teal-500 rounded-lg hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
@@ -45,11 +45,11 @@ $modelName = $modelName ?? 'default';
                     <?php foreach ($filters as $filter): ?>
                         <div class="flex-1 min-w-[200px]">
                             <input type="text" placeholder="<?= $filter['placeholder'] ?? 'Filtrer...' ?>"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 transition duration-300" />
+                                class="w-full px-4 py-2 transition duration-300 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400" />
                         </div>
                     <?php endforeach; ?>
                     <button
-                        class="bg-teal-500 text-white px-6 py-2 rounded-lg hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 transition duration-500 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                        class="px-6 py-2 text-white transition duration-500 ease-in-out transform bg-teal-500 rounded-lg hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
                         Appliquer
                     </button>
                 </div>
@@ -60,17 +60,17 @@ $modelName = $modelName ?? 'default';
     <!-- Tableau -->
     <div class="mt-6 animate__animated animate__fadeInUp">
         <a href="<?= PUBLIC_URL . $modelName ?>/export"
-            class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 transition duration-500 ease-in-out transform hover:scale-105">
+            class="px-4 py-2 text-white transition duration-500 ease-in-out transform bg-teal-500 rounded hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 hover:scale-105">
             Exporter en CSV
         </a>
     </div>
     <div class="overflow-x-auto animate__animated animate__fadeInUp">
-        <table class="min-w-full w-full bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+        <table class="w-full min-w-full bg-white rounded-lg shadow-lg dark:bg-gray-700">
             <thead>
                 <tr class="bg-gray-50 dark:bg-gray-800">
                     <?php foreach ($columns as $column): ?>
                         <th
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-300">
+                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase transition duration-300 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
                             <a
                                 href="?sort=<?= $column['key'] ?>&direction=<?= $sort === $column['key'] && $direction === 'asc' ? 'desc' : 'asc' ?>">
                                 <?= $column['label'] ?>
@@ -84,7 +84,7 @@ $modelName = $modelName ?? 'default';
                     <?php endforeach; ?>
                     <?php if (!empty($actions)): ?>
                         <th
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
                             Actions
                         </th>
                     <?php endif; ?>
@@ -94,7 +94,7 @@ $modelName = $modelName ?? 'default';
                 <?php if ($data && $data->count() > 0): ?>
                     <?php foreach ($data as $item): ?>
                         <tr
-                            class="hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-500 animate__animated animate__fadeIn">
+                            class="transition duration-500 hover:bg-gray-50 dark:hover:bg-gray-800 animate__animated animate__fadeIn">
                             <?php foreach ($columns as $column): ?>
                                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                                     <?= $item[$column['key']] ?>
@@ -107,7 +107,7 @@ $modelName = $modelName ?? 'default';
                                     <div class="relative inline-block text-left">
                                         <!-- Bouton d'actions -->
                                         <button onclick="toggleDropdown(event, 'actions-<?= $item['id'] ?>')"
-                                            class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 transition duration-500 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                            class="flex items-center justify-center w-8 h-8 transition duration-500 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z">
@@ -117,18 +117,18 @@ $modelName = $modelName ?? 'default';
 
                                         <!-- Menu déroulant -->
                                         <div id="actions-<?= $item['id'] ?>"
-                                            class="hidden absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 z-50 animate__animated animate__fadeIn ">
+                                            class="absolute right-0 z-50 hidden w-48 mt-2 bg-white rounded-lg shadow-lg dark:bg-gray-700 ring-1 ring-black ring-opacity-5 animate__animated animate__fadeIn ">
                                             <div class="py-1">
                                                 <?php foreach ($actions as $action): ?>
                                                     <?php if (isset($action['type']) && $action['type'] === 'delete'): ?>
                                                         <!-- Bouton pour ouvrir le modal de suppression -->
                                                         <button onclick="openModal('deleteModal-<?= $item['id'] ?>')"
-                                                            class="block w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-gray-100 dark:text-red-500 dark:hover:bg-gray-600 transition duration-300">
+                                                            class="block w-full px-4 py-2 text-sm text-left text-red-600 transition duration-300 hover:bg-gray-100 dark:text-red-500 dark:hover:bg-gray-600">
                                                             <?= $action['label'] ?>
                                                         </button>
                                                     <?php else: ?>
                                                         <a href="<?= $action['url']($item) ?>"
-                                                            class="block px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 transition duration-300">
+                                                            class="block px-4 py-2 text-sm text-left text-gray-700 transition duration-300 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600">
                                                             <?= $action['label'] ?>
                                                         </a>
                                                     <?php endif; ?>
@@ -157,7 +157,7 @@ $modelName = $modelName ?? 'default';
                 <?php else: ?>
                     <tr>
                         <td colspan=" <?= count($columns) + empty($actions) ? 0 : 1 ?> "
-                            class="px-6 py-4 text-center text-gray-500 dark:text-gray-400 animate__animated animate__fadeIn">
+                            class="w-full px-6 py-4 text-center text-gray-500 dark:text-gray-400 animate__animated animate__fadeIn">
                             Aucun élément à afficher.
                         </td>
                     </tr>
@@ -167,7 +167,7 @@ $modelName = $modelName ?? 'default';
     </div>
 </div>
 <!-- Pagination -->
-<div class="mt-6 flex justify-between items-center animate__animated animate__fadeInUp">
+<div class="flex items-center justify-between mt-6 animate__animated animate__fadeInUp">
     <!-- Texte indiquant la plage d'éléments -->
     <div class="text-sm text-gray-700 dark:text-gray-300">
         Affichage de <?= $data->firstItem() ?> à <?= $data->lastItem() ?> sur <?= $data->total() ?> éléments
@@ -178,12 +178,12 @@ $modelName = $modelName ?? 'default';
         <!-- Bouton Précédent -->
         <?php if ($data->onFirstPage()): ?>
             <div
-                class="border rounded-md bg-gray-100 dark:bg-gray-700 px-2 py-1 text-3xl leading-6 text-slate-400 dark:text-gray-400 cursor-not-allowed shadow-sm">
+                class="px-2 py-1 text-3xl leading-6 bg-gray-100 border rounded-md shadow-sm cursor-not-allowed dark:bg-gray-700 text-slate-400 dark:text-gray-400">
                 &lt;
             </div>
         <?php else: ?>
             <a href="<?= $data->previousPageUrl() ?>"
-                class="border rounded-md bg-teal-500 dark:bg-teal-600 px-2 py-1 text-3xl leading-6 text-white transition hover:bg-teal-600 dark:hover:bg-teal-700 cursor-pointer shadow-sm">
+                class="px-2 py-1 text-3xl leading-6 text-white transition bg-teal-500 border rounded-md shadow-sm cursor-pointer dark:bg-teal-600 hover:bg-teal-600 dark:hover:bg-teal-700">
                 &lt;
             </a>
         <?php endif; ?>
@@ -196,12 +196,12 @@ $modelName = $modelName ?? 'default';
         <!-- Bouton Suivant -->
         <?php if ($data->hasMorePages()): ?>
             <a href="<?= $data->nextPageUrl() ?>"
-                class="border rounded-md bg-teal-500 dark:bg-teal-600 px-2 py-1 text-3xl leading-6 text-white transition hover:bg-teal-600 dark:hover:bg-teal-700 cursor-pointer shadow-sm">
+                class="px-2 py-1 text-3xl leading-6 text-white transition bg-teal-500 border rounded-md shadow-sm cursor-pointer dark:bg-teal-600 hover:bg-teal-600 dark:hover:bg-teal-700">
                 &gt;
             </a>
         <?php else: ?>
             <div
-                class="border rounded-md bg-gray-100 dark:bg-gray-700 px-2 py-1 text-3xl leading-6 text-slate-400 dark:text-gray-400 cursor-not-allowed shadow-sm">
+                class="px-2 py-1 text-3xl leading-6 bg-gray-100 border rounded-md shadow-sm cursor-not-allowed dark:bg-gray-700 text-slate-400 dark:text-gray-400">
                 &gt;
             </div>
         <?php endif; ?>
