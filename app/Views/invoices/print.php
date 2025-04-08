@@ -51,16 +51,16 @@
             <?php foreach ($invoice->invoiceLines as $line): ?>
             <tr>
                 <td><?= htmlspecialchars($line->product->designation) ?></td>
-                <td class="text-right"><?= number_format($line->unit_price, 2) ?> €</td>
+                <td class="text-right"><?= number_format($line->unit_price, 2) ?> FC</td>
                 <td class="text-right"><?= $line->quantity ?></td>
-                <td class="text-right"><?= number_format($line->unit_price * $line->quantity, 2) ?> €</td>
+                <td class="text-right"><?= number_format($line->unit_price * $line->quantity, 2) ?> FC</td>
             </tr>
             <?php endforeach; ?>
         </tbody>
         <tfoot>
             <tr class="total-row">
                 <td colspan="3">Total</td>
-                <td class="text-right"><?= number_format($invoice->total_amount, 2) ?> €</td>
+                <td class="text-right"><?= number_format($invoice->total_amount, 2) ?> FC</td>
             </tr>
         </tfoot>
     </table>

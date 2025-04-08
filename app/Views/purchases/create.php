@@ -26,7 +26,7 @@
 
         <div class="flex items-center justify-between">
             <div class="text-xl font-bold">
-                Total: <span id="total-amount">0.00</span> €
+                Total: <span id="total-amount">0.00</span> FC
             </div>
             
             <button type="submit" class="px-4 py-2 text-white bg-teal-500 rounded hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700">
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <option value="">Sélectionner un produit</option>
                         ${productsData.map(p => 
                             `<option value="${p.id}" ${product && product.id === p.id ? 'selected' : ''}
-                             data-price="${p.unit_price}">${p.designation} (${p.unit_price} €)</option>`
+                             data-price="${p.unit_price}">${p.designation} (${p.unit_price} FC)</option>`
                         ).join('')}
                     </select>
                 </div>
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
             <div class="font-semibold text-right price-display">
-                Total ligne: <span class="line-total">${product ? (product.unit_price * product.quantity).toFixed(2) : '0.00'}</span> €
+                Total ligne: <span class="line-total">${product ? (product.unit_price * product.quantity).toFixed(2) : '0.00'}</span> FC
             </div>
         `;
         

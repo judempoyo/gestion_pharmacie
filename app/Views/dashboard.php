@@ -49,7 +49,7 @@
                 </div>
                 <div>
                     <p class="text-gray-500 dark:text-gray-300">Ventes ce mois</p>
-                    <p class="text-2xl font-bold dark:text-white"><?= number_format($monthlySales, 2) ?> €</p>
+                    <p class="text-2xl font-bold dark:text-white"><?= number_format($monthlySales, 2) ?> FC</p>
                 </div>
             </div>
         </div>
@@ -101,7 +101,7 @@
                                     <?= $product->quantity ?>
                                 </td>
                                 <td class="py-2 text-right">
-                                    <a href="<?= PUBLIC_URL ?>product/edit/<?= $product->id ?>"
+                                    <a href="<?= PUBLIC_URL ?>purchase/create"
                                         class="text-blue-600 hover:underline dark:text-blue-400">Commander</a>
                                 </td>
                             </tr>
@@ -135,7 +135,7 @@
                                 </a>
                             </td>
                             <td class="py-2 dark:text-white"><?= htmlspecialchars($invoice->customer->name) ?></td>
-                            <td class="py-2 text-right dark:text-white"><?= number_format($invoice->total_amount, 2) ?> €
+                            <td class="py-2 text-right dark:text-white"><?= number_format($invoice->total_amount, 2) ?> FC
                             </td>
                             <td class="py-2 text-right dark:text-white"><?= $invoice->created_at->format('d/m/Y H:i') ?>
                             </td>
@@ -185,7 +185,7 @@
             data: {
                 labels: <?= json_encode($salesChart['labels']) ?>,
                 datasets: [{
-                    label: 'Ventes mensuelles (€)',
+                    label: 'Ventes mensuelles (FC)',
                     data: <?= json_encode($salesChart['data']) ?>,
                     backgroundColor: 'rgba(59, 130, 246, 0.7)',
                     borderColor: 'rgba(59, 130, 246, 1)',
