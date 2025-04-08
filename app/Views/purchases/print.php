@@ -1,73 +1,75 @@
+<!-- filepath: /var/www/html/Projets/gestion_pharmacie/app/Views/purchases/print.php -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bon de commande #<?= $purchase->id ?></title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .purchase-header { display: flex; justify-content: space-between; margin-bottom: 30px; }
-        .purchase-info { margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .text-right { text-align: right; }
-        .total-row { font-weight: bold; }
-        .footer { margin-top: 50px; text-align: center; font-size: 0.8em; }
+        @media print {
+            .no-print { display: none; }
+        }
     </style>
 </head>
-<body>
-    <div class="purchase-header">
-        <div>
-            <h1>Pharmacie XYZ</h1>
-            <p>123 Rue Principale</p>
-            <p>75000 Paris</p>
-            <p>Tél: 01 23 45 67 89</p>
-        </div>
-        <div>
-            <h2>Facture #<?= $purchase->id ?></h2>
-            <p>Date: <?= date('d/m/Y', strtotime($purchase->created_at)) ?></p>
-        </div>
-    </div>
+<body class="bg-gray-100">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="w-full max-w-3xl p-8 bg-white rounded-lg shadow-lg">
+            <!-- En-tête du bon de commande -->
+            <div class="flex items-center justify-between pb-4 mb-6 border-b">
+                <div>
+                    <h1 class="text-2xl font-bold text-teal-600">Pharmacie XYZ</h1>
+                    <p class="text-sm text-gray-600">123 Rue Principale</p>
+                    <p class="text-sm text-gray-600">75000 Paris</p>
+                    <p class="text-sm text-gray-600">Tél: 01 23 45 67 89</p>
+                </div>
+                <div class="text-right">
+                    <h2 class="text-xl font-semibold text-gray-800">Bon de commande #<?= $purchase->id ?></h2>
+                    <p class="text-sm text-gray-600">Date: <?= date('d/m/Y', strtotime($purchase->created_at)) ?></p>
+                </div>
+            </div>
 
-    <div class="purchase-info">
-        <div>
-            <h3>Client</h3>
-            <p><?= htmlspecialchars($purchase->supplier->name) ?></p>
-            <p><?= htmlspecialchars($purchase->supplier->phone) ?></p>
+            <!-- Informations du fournisseur -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Fournisseur</h3>
+                <p class="text-sm text-gray-600"><?= htmlspecialchars($purchase->supplier->name) ?></p>
+                <p class="text-sm text-gray-600"><?= htmlspecialchars($purchase->supplier->phone) ?></p>
+            </div>
+
+            <!-- Tableau des produits -->
+            <table class="w-full mb-6 border border-collapse border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-4 py-2 text-sm font-medium text-left text-gray-600 border border-gray-300">Produit</th>
+                        <th class="px-4 py-2 text-sm font-medium text-right text-gray-600 border border-gray-300">Prix unitaire</th>
+                        <th class="px-4 py-2 text-sm font-medium text-right text-gray-600 border border-gray-300">Quantité</th>
+                        <th class="px-4 py-2 text-sm font-medium text-right text-gray-600 border border-gray-300">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($purchase->purchaseLines as $line): ?>
+                    <tr>
+                        <td class="px-4 py-2 text-sm text-gray-800 border border-gray-300"><?= htmlspecialchars($line->product->designation) ?></td>
+                        <td class="px-4 py-2 text-sm text-right text-gray-800 border border-gray-300"><?= number_format($line->unit_price, 2) ?> FC</td>
+                        <td class="px-4 py-2 text-sm text-right text-gray-800 border border-gray-300"><?= $line->quantity ?></td>
+                        <td class="px-4 py-2 text-sm text-right text-gray-800 border border-gray-300"><?= number_format($line->unit_price * $line->quantity, 2) ?> FC</td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+                <tfoot>
+                    <tr class="bg-gray-100">
+                        <td colspan="3" class="px-4 py-2 text-sm font-semibold text-right text-gray-800 border border-gray-300">Total</td>
+                        <td class="px-4 py-2 text-sm font-semibold text-right text-gray-800 border border-gray-300"><?= number_format($purchase->total_amount, 2) ?> FC</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- Pied de page -->
+            <div class="text-sm text-center text-gray-600">
+                <p>Merci pour votre confiance</p>
+                <p>Bon de commande généré le <?= date('d/m/Y H:i') ?></p>
+            </div>
         </div>
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Produit</th>
-                <th class="text-right">Prix unitaire</th>
-                <th class="text-right">Quantité</th>
-                <th class="text-right">Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($purchase->purchaseLines as $line): ?>
-            <tr>
-                <td><?= htmlspecialchars($line->product->designation) ?></td>
-                <td class="text-right"><?= number_format($line->unit_price, 2) ?> FC</td>
-                <td class="text-right"><?= $line->quantity ?></td>
-                <td class="text-right"><?= number_format($line->unit_price * $line->quantity, 2) ?> FC</td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-        <tfoot>
-            <tr class="total-row">
-                <td colspan="3">Total</td>
-                <td class="text-right"><?= number_format($purchase->total_amount, 2) ?> FC</td>
-            </tr>
-        </tfoot>
-    </table>
-
-    <div class="footer">
-        <p>Merci pour votre confiance</p>
-        <p>Facture générée le <?= date('d/m/Y H:i') ?></p>
     </div>
 
     <script>
