@@ -75,7 +75,7 @@
     <!-- Graphiques et tableaux -->
     <div class="grid grid-cols-1 gap-8 mb-8 lg:grid-cols-2">
         <!-- Graphique des ventes -->
-        <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700 dark:text-white">
             <h2 class="mb-4 text-xl font-bold dark:text-white">Ventes mensuelles</h2>
             <canvas id="salesChart" height="300"></canvas>
         </div>
@@ -147,7 +147,7 @@
     </div>
 
     <!-- Informations utilisateur -->
-    <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700">
+    <!-- <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700">
         <h2 class="mb-4 text-xl font-bold dark:text-white">Votre compte</h2>
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
@@ -158,10 +158,7 @@
                 <p class="text-gray-500 dark:text-gray-300">Email</p>
                 <p class="text-lg dark:text-white"><?= htmlspecialchars($user->email) ?></p>
             </div>
-            <!--  <div>
-                <p class="text-gray-500 dark:text-gray-300">Téléphone</p>
-                <p class="text-lg dark:text-white"><?= htmlspecialchars($user->phone) ?></p>
-            </div> -->
+         
             <div>
                 <p class="text-gray-500 dark:text-gray-300">Compte créé le</p>
                 <p class="text-lg dark:text-white"><?= $user->created_at->format('d/m/Y') ?></p>
@@ -176,7 +173,7 @@
             </a>
         </div>
     </div>
-
+ -->
 
 <!-- Script pour le graphique -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
