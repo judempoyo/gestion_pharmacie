@@ -167,6 +167,8 @@ $modelName = $modelName ?? 'default';
     </div>
 </div>
 <!-- Pagination -->
+
+   <!-- Pagination -->
 <div class="flex items-center justify-between mt-6 animate__animated animate__fadeInUp">
     <!-- Texte indiquant la plage d'éléments -->
     <div class="text-sm text-gray-700 dark:text-gray-300">
@@ -174,35 +176,42 @@ $modelName = $modelName ?? 'default';
     </div>
 
     <!-- Boutons de pagination -->
-    <div class="flex items-center space-x-4">
+    <div class="flex">
         <!-- Bouton Précédent -->
         <?php if ($data->onFirstPage()): ?>
             <div
-                class="px-2 py-1 text-3xl leading-6 bg-gray-100 border rounded-md shadow-sm cursor-not-allowed dark:bg-gray-700 text-slate-400 dark:text-gray-400">
-                &lt;
+                class="flex items-center justify-center h-10 px-4 text-base font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed me-3 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500">
+                <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+                </svg>
+                Precedent
             </div>
         <?php else: ?>
             <a href="<?= $data->previousPageUrl() ?>"
-                class="px-2 py-1 text-3xl leading-6 text-white transition bg-teal-500 border rounded-md shadow-sm cursor-pointer dark:bg-teal-600 hover:bg-teal-600 dark:hover:bg-teal-700">
-                &lt;
+                class="flex items-center justify-center h-10 px-4 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg me-3 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                <svg class="w-3.5 h-3.5 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+                </svg>
+                Precedent
             </a>
         <?php endif; ?>
-
-        <!-- Indicateur de page -->
-        <div class="text-slate-500 dark:text-gray-300">
-            <?= $data->currentPage() ?> / <?= $data->lastPage() ?>
-        </div>
 
         <!-- Bouton Suivant -->
         <?php if ($data->hasMorePages()): ?>
             <a href="<?= $data->nextPageUrl() ?>"
-                class="px-2 py-1 text-3xl leading-6 text-white transition bg-teal-500 border rounded-md shadow-sm cursor-pointer dark:bg-teal-600 hover:bg-teal-600 dark:hover:bg-teal-700">
-                &gt;
+                class="flex items-center justify-center h-10 px-4 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                Suivant
+                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                </svg>
             </a>
         <?php else: ?>
             <div
-                class="px-2 py-1 text-3xl leading-6 bg-gray-100 border rounded-md shadow-sm cursor-not-allowed dark:bg-gray-700 text-slate-400 dark:text-gray-400">
-                &gt;
+                class="flex items-center justify-center h-10 px-4 text-base font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-lg cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500">
+                Suivant
+                <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                </svg>
             </div>
         <?php endif; ?>
     </div>
