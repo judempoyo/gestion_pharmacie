@@ -53,7 +53,7 @@
 
             <!-- Ventes -->
             <li>
-                <a href=" <?= PUBLIC_URL ?>booking"
+                <a href=" <?= PUBLIC_URL ?>invoice"
                     class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
 
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none"
