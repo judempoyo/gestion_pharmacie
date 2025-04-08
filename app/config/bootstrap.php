@@ -15,6 +15,7 @@ define('PUBLIC_URL', 'http://jump.localhost/Projets/gestion_pharmacie/public/');
 
 use FastRoute\RouteCollector;
 use App\Controllers\CustomerController;
+use App\Controllers\InvoiceController;
 use App\Controllers\ProductController;
 use App\Controllers\SupplierController;
 use App\Controllers\AuthController;
@@ -47,6 +48,14 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($base
   $r->addRoute('GET', $basePath . '/customer/edit/{id:\d+}', [CustomerController::class, 'edit']);
   $r->addRoute('POST', $basePath . '/customer/update/{id:\d+}', [CustomerController::class, 'update']);
   $r->addRoute('POST', $basePath . '/customer/delete/{id:\d+}', [CustomerController::class, 'delete']);
+
+  $r->addRoute('GET', $basePath . '/invoice', [InvoiceController::class, 'index']);
+  $r->addRoute('GET', $basePath . '/invoice/create', [InvoiceController::class, 'create']);
+  $r->addRoute('POST', $basePath . '/invoice/store', [InvoiceController::class, 'store']);
+  $r->addRoute('GET', $basePath . '/invoice/export', [InvoiceController::class, 'export']);
+  $r->addRoute('GET', $basePath . '/invoice/edit/{id:\d+}', [InvoiceController::class, 'edit']);
+  $r->addRoute('POST', $basePath . '/invoice/update/{id:\d+}', [InvoiceController::class, 'update']);
+  $r->addRoute('POST', $basePath . '/invoice/delete/{id:\d+}', [InvoiceController::class, 'delete']);
 
   $r->addRoute('GET', $basePath . '/supplier', [SupplierController::class, 'index']);
   $r->addRoute('GET', $basePath . '/supplier/create', [SupplierController::class, 'create']);
