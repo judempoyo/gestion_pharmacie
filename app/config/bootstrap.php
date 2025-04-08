@@ -21,6 +21,7 @@ use App\Controllers\ProductController;
 use App\Controllers\SupplierController;
 use App\Controllers\AuthController;
 use App\Controllers\UserController;
+use App\Controllers\DashboardController;
 use Illuminate\Pagination\Paginator;
 
 // Initialiser la pagination
@@ -101,7 +102,7 @@ $r->addRoute('POST', $basePath . '/profile/delete', [UserController::class, 'del
   $r->addRoute('GET', $basePath . '/reset-password/{token}', [AuthController::class, 'showResetForm']);
   $r->addRoute('POST', $basePath . '/reset-password', [AuthController::class, 'resetPassword']);
 
-  $r->addRoute('GET', $basePath . '/dashboard', [AuthController::class, 'dashboard']);
+  $r->addRoute('GET', $basePath . '/dashboard', [DashboardController::class, 'index']);
 });
 
 
