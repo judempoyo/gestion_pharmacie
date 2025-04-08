@@ -134,7 +134,8 @@ class InvoiceController
 
     public function edit($id)
     {
-        $invoice = Invoice::with(['invoiceLines.product'])->find($id);
+        $invoiceId = is_array($id) ? ($id['id'] ?? null) : $id;
+        $invoice = Invoice::with(['invoiceLines.product'])->find($invoiceId);
         $customers = Customer::all();
         $products = Product::all();
 

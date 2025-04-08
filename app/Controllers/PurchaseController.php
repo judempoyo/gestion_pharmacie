@@ -132,7 +132,9 @@ class PurchaseController
 
     public function edit($id)
     {
-        $purchase = Purchase::with(['purchaseLines.product'])->find($id);
+        $purchaseId = is_array($id) ? ($id['id'] ?? null) : $id;
+
+        $purchase = Purchase::with(['purchaseLines.product'])->find($purchaseId);
         $suppliers = Supplier::all();
         $products = Product::all();
 
