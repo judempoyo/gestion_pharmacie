@@ -54,6 +54,8 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($base
   $r->addRoute('POST', $basePath . '/invoice/store', [InvoiceController::class, 'store']);
   $r->addRoute('GET', $basePath . '/invoice/export', [InvoiceController::class, 'export']);
   $r->addRoute('GET', $basePath . '/invoice/edit/{id:\d+}', [InvoiceController::class, 'edit']);
+  $r->addRoute('GET', $basePath . '/invoice/show/{id:\d+}', [InvoiceController::class, 'show']);
+  $r->addRoute('GET', $basePath . '/invoice/print/{id:\d+}', [InvoiceController::class, 'print']);
   $r->addRoute('POST', $basePath . '/invoice/update/{id:\d+}', [InvoiceController::class, 'update']);
   $r->addRoute('POST', $basePath . '/invoice/delete/{id:\d+}', [InvoiceController::class, 'delete']);
 

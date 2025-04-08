@@ -19,13 +19,37 @@ class InvoiceController
 
     public function index()
     {
-        $perPage = 10;
+        $perPage = 10; 
+        $sort = $_GET['sort'] ?? 'id'; 
+        $direction = $_GET['direction'] ?? 'asc'; 
+    
+        
+        $allowedSorts = ['id', 'customers.name', 'total_amount']; // Champs autorisés pour le tri
+        $allowedDirections = ['asc', 'desc']; // Directions autorisées
+    
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'id';
+        }
+        if (!in_array($direction, $allowedDirections)) {
+            $direction = 'asc';
+        }
+    
+        // Pagination avec tri
+        $invoices = Invoice::with('customer')->orderBy('id', 'desc')->paginate($perPage);
+    
+        $this->render('app', 'invoices/index', [
+            'invoices' => $invoices,
+            'title' => 'Liste des Factures',
+            'sort' => $sort,
+            'direction' => $direction,
+        ]);
+        /* $perPage = 10;
         $invoices = Invoice::with('customer')->orderBy('id', 'desc')->paginate($perPage);
 
         $this->render('app', 'invoices/index', [
             'invoices' => $invoices,
             'title' => 'Liste des Factures'
-        ]);
+        ]); */
     }
 
     public function create()

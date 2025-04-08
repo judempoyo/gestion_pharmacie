@@ -1,10 +1,12 @@
 <?php
+
+
 $tableParams = [
     'title' => 'Liste des Factures',
     'createUrl' => PUBLIC_URL . 'invoice/create',
     'columns' => [
         ['key' => 'id', 'label' => 'Numéro'],
-        ['key' => 'customer.name', 'label' => 'Client'],
+        ['key' => 'customers.name', 'label' => 'Client'],
         ['key' => 'total_amount', 'label' => 'Montant', 'format' => 'price'],
         ['key' => 'created_at', 'label' => 'Date', 'format' => 'date'],
     ],
