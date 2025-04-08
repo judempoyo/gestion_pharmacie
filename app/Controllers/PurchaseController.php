@@ -114,7 +114,9 @@ class PurchaseController
 
     public function show($id)
     {
-        $purchase = Purchase::with(['supplier', 'purchaseLines.product'])->find($id);
+        $purchaseId = is_array($id) ? ($id['id'] ?? null) : $id;
+    
+        $purchase = Purchase::with(['supplier', 'purchaseLines.product'])->find($purchaseId);
         
         if (!$purchase) {
             http_response_code(404);
@@ -230,7 +232,9 @@ class PurchaseController
 
     public function print($id)
     {
-        $purchase = Purchase::with(['supplier', 'purchaseLines.product'])->find($id);
+        $purchaseId = is_array($id) ? ($id['id'] ?? null) : $id;
+    
+        $purchase = Purchase::with(['supplier', 'purchaseLines.product'])->find($purchaseId);
         
         if (!$purchase) {
             http_response_code(404);
