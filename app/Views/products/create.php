@@ -14,11 +14,11 @@
             <label class="block mb-2 text-gray-700 dark:text-gray-300">Prix unitaire</label>
             <input type="number" step="0.01" name="unit_price" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
         </div>
-        <div class="mb-4">
+       <!--  <div class="mb-4">
             <label class="block mb-2 text-gray-700 dark:text-gray-300">Image du produit</label>
             <input type="file" name="image" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
         </div>
-        
+         -->
         <button type="submit" class="px-4 py-2 text-white bg-teal-500 rounded hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700">
             Enregistrer
         </button>

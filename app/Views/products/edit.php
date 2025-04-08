@@ -14,7 +14,7 @@
             <label class="block mb-2 text-gray-700 dark:text-gray-300">Prix unitaire</label>
             <input type="number" step="0.01" name="unit_price" value="<?= htmlspecialchars($product->unit_price) ?>" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
         </div>
-        <div class="mb-4">
+        <!-- <div class="mb-4">
             <label class="block mb-2 text-gray-700 dark:text-gray-300">Image actuelle</label>
             <?php if ($product->image_url): ?>
                 <img src="<?= PUBLIC_URL  . $product->image_url ?>" alt="Image produit" class="object-cover w-32 h-32 mb-2">
@@ -23,7 +23,7 @@
             <?php endif; ?>
             <label class="block mb-2 text-gray-700 dark:text-gray-300">Nouvelle image</label>
             <input type="file" name="image" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-        </div>
+        </div> -->
         
         <button type="submit" class="px-4 py-2 text-white bg-teal-500 rounded hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700">
             Mettre à jour

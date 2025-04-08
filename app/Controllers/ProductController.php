@@ -68,7 +68,7 @@ class ProductController
         }
 
         // Handle image upload
-        if (!empty($_FILES['image']['name'])) {
+       /*  if (!empty($_FILES['image']['name'])) {
             $uploadResult = $this->handleImageUpload();
             if ($uploadResult['success']) {
                 $data['image_url'] = $uploadResult['path'];
@@ -77,7 +77,7 @@ class ProductController
                 echo $uploadResult['error'];
                 return;
             }
-        }
+        } */
 
         Product::create($data);
 
@@ -130,7 +130,7 @@ class ProductController
             return;
         }
 
-        // Handle image upload if new image is provided
+        /* // Handle image upload if new image is provided
         if (!empty($_FILES['image']['name'])) {
             $uploadResult = $this->handleImageUpload();
             if ($uploadResult['success']) {
@@ -144,7 +144,7 @@ class ProductController
                 echo $uploadResult['error'];
                 return;
             }
-        }
+        } */
 
         $product->update($data);
         $_SESSION['flash'] = [
@@ -212,7 +212,7 @@ class ProductController
         exit();
     }
 
-    protected function handleImageUpload()
+    /* protected function handleImageUpload()
     {
         $targetDir = $_SERVER['DOCUMENT_ROOT'] . $this->basePath . "/uploads/products/";
         
@@ -252,5 +252,5 @@ class ProductController
             $error = error_get_last();
             return ['success' => false, 'error' => 'Erreur de téléchargement: ' . ($error['message'] ?? 'Unknown error')];
         }
-    }
+    } */
 }

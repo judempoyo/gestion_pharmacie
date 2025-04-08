@@ -7,12 +7,12 @@ $tableParams = [
         ['key' => 'designation', 'label' => 'Désignation'],
         ['key' => 'quantity', 'label' => 'Quantité'],
         ['key' => 'unit_price', 'label' => 'Prix unitaire'],
-        [
+        /* [
             'key' => 'image_url', 
             'label' => 'Image', 
             'format' => 'image',
             'basePath' => PUBLIC_URL
-        ],
+        ], */
     ],
     'data' => $products, 
     'actions' => [
