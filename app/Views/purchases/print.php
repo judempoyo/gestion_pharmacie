@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facture #<?= $invoice->id ?></title>
+    <title>Bon de commande #<?= $purchase->id ?></title>
     <style>
         body { font-family: Arial, sans-serif; }
-        .invoice-header { display: flex; justify-content: space-between; margin-bottom: 30px; }
-        .invoice-info { margin-bottom: 30px; }
+        .purchase-header { display: flex; justify-content: space-between; margin-bottom: 30px; }
+        .purchase-info { margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-    <div class="invoice-header">
+    <div class="purchase-header">
         <div>
             <h1>Pharmacie XYZ</h1>
             <p>123 Rue Principale</p>
@@ -25,16 +25,16 @@
             <p>Tél: 01 23 45 67 89</p>
         </div>
         <div>
-            <h2>Facture #<?= $invoice->id ?></h2>
-            <p>Date: <?= date('d/m/Y', strtotime($invoice->created_at)) ?></p>
+            <h2>Facture #<?= $purchase->id ?></h2>
+            <p>Date: <?= date('d/m/Y', strtotime($purchase->created_at)) ?></p>
         </div>
     </div>
 
-    <div class="invoice-info">
+    <div class="purchase-info">
         <div>
             <h3>Client</h3>
-            <p><?= htmlspecialchars($invoice->customer->name) ?></p>
-            <p><?= htmlspecialchars($invoice->customer->phone) ?></p>
+            <p><?= htmlspecialchars($purchase->supplier->name) ?></p>
+            <p><?= htmlspecialchars($purchase->supplier->phone) ?></p>
         </div>
     </div>
 
@@ -48,7 +48,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($invoice->invoiceLines as $line): ?>
+            <?php foreach ($purchase->purchaseLines as $line): ?>
             <tr>
                 <td><?= htmlspecialchars($line->product->designation) ?></td>
                 <td class="text-right"><?= number_format($line->unit_price, 2) ?> €</td>
@@ -60,7 +60,7 @@
         <tfoot>
             <tr class="total-row">
                 <td colspan="3">Total</td>
-                <td class="text-right"><?= number_format($invoice->total_amount, 2) ?> €</td>
+                <td class="text-right"><?= number_format($purchase->total_amount, 2) ?> €</td>
             </tr>
         </tfoot>
     </table>

@@ -1,14 +1,14 @@
 <div class="max-w-4xl p-6 mx-auto mt-8 bg-white rounded-lg shadow dark:bg-gray-800">
-    <h1 class="mb-6 text-3xl font-bold text-gray-900 dark:text-white">Modifier la facture #<?= $invoice->id ?></h1>
+    <h1 class="mb-6 text-3xl font-bold text-gray-900 dark:text-white">Modifier le bon de commande #<?= $purchase->id ?></h1>
     
-    <form action="<?= $this->basePath ?>/invoice/update/<?= $invoice->id ?>" method="POST" id="invoice-form">
+    <form action="<?= $this->basePath ?>/purchase/update/<?= $purchase->id ?>" method="POST" id="purchase-form">
         <div class="mb-6">
-            <label class="block mb-2 text-gray-700 dark:text-gray-300">Client</label>
-            <select name="customer_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                <option value="">Sélectionner un client</option>
-                <?php foreach ($customers as $customer): ?>
-                    <option value="<?= $customer->id ?>" <?= $invoice->customer_id == $customer->id ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($customer->name) ?>
+            <label class="block mb-2 text-gray-700 dark:text-gray-300">Fournisseur</label>
+            <select name="supplier_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                <option value="">Sélectionner un fournisseur</option>
+                <?php foreach ($suppliers as $supplier): ?>
+                    <option value="<?= $supplier->id ?>" <?= $purchase->supplier_id == $supplier->id ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($supplier->name) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -18,7 +18,7 @@
             <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white">Produits</h3>
             
             <div id="products-container">
-                <?php foreach ($invoice->invoiceLines as $line): ?>
+                <?php foreach ($purchase->purchaseLines as $line): ?>
                     <div class="p-4 mb-4 border rounded product-line dark:border-gray-600" data-index="<?= $line->id ?>">
                         <div class="flex flex-wrap -mx-2">
                             <div class="w-full px-2 mb-4 md:w-1/2">
@@ -59,7 +59,7 @@
 
         <div class="flex items-center justify-between">
             <div class="text-xl font-bold">
-                Total: <span id="total-amount"><?= number_format($invoice->total_amount, 2) ?></span> €
+                Total: <span id="total-amount"><?= number_format($purchase->total_amount, 2) ?></span> €
             </div>
             
             <button type="submit" class="px-4 py-2 text-white bg-teal-500 rounded hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700">
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const productsContainer = document.getElementById('products-container');
     const addProductBtn = document.getElementById('add-product');
     const totalAmountSpan = document.getElementById('total-amount');
-    let productCount = <?= $invoice->invoiceLines->count() ?>;
+    let productCount = <?= $purchase->purchaseLines->count() ?>;
     
     // Données des produits disponibles
     const productsData = <?= json_encode($products) ?>;
