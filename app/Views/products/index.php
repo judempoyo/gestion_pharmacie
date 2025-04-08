@@ -1,7 +1,7 @@
 <?php
 $tableParams = [
     'title' => 'Liste des Produits',
-    'createUrl' => PUBLIC_URL . '/product/create',
+    'createUrl' => PUBLIC_URL . 'product/create',
     'columns' => [
         ['key' => 'id', 'label' => 'ID'],
         ['key' => 'designation', 'label' => 'Désignation'],
@@ -19,14 +19,14 @@ $tableParams = [
         [
             'label' => 'Modifier',
             'url' => function($item) {
-                return PUBLIC_URL . '/product/edit/' . $item['id'];
+                return PUBLIC_URL . 'product/edit/' . $item['id'];
             },
         ],
         [
             'label' => 'Supprimer',
             'type' => 'delete', 
             'url' => function($item) {
-                return PUBLIC_URL . '/product/delete/' . $item['id'];
+                return PUBLIC_URL . 'product/delete/' . $item['id'];
             },
         ],
     ],

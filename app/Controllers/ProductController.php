@@ -214,37 +214,43 @@ class ProductController
 
     protected function handleImageUpload()
     {
-        $targetDir = "uploads/products/";
+        $targetDir = $_SERVER['DOCUMENT_ROOT'] . $this->basePath . "/uploads/products/";
+        
         if (!file_exists($targetDir)) {
-            mkdir($targetDir, 0777, true);
+            if (!mkdir($targetDir, 0775, true)) {
+                return ['success' => false, 'error' => 'Impossible de créer le répertoire de téléchargement.'];
+            }
         }
-
+    
         $imageFileType = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
         $fileName = uniqid() . '.' . $imageFileType;
         $targetFile = $targetDir . $fileName;
-
+    
         // Check if image file is a actual image or fake image
         $check = getimagesize($_FILES["image"]["tmp_name"]);
         if ($check === false) {
             return ['success' => false, 'error' => 'Le fichier n\'est pas une image.'];
         }
-
+    
         // Check file size (max 2MB)
         if ($_FILES["image"]["size"] > 2000000) {
             return ['success' => false, 'error' => 'L\'image est trop volumineuse (max 2MB).'];
         }
-
+    
         // Allow certain file formats
         $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
         if (!in_array($imageFileType, $allowedTypes)) {
             return ['success' => false, 'error' => 'Seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.'];
         }
-
+    
         // Try to upload file
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-            return ['success' => true, 'path' => $targetFile];
+            // Return relative path for database storage
+            return ['success' => true, 'path' => "uploads/products/" . $fileName];
         } else {
-            return ['success' => false, 'error' => 'Une erreur est survenue lors du téléchargement de l\'image.'];
+            // Add more detailed error information
+            $error = error_get_last();
+            return ['success' => false, 'error' => 'Erreur de téléchargement: ' . ($error['message'] ?? 'Unknown error')];
         }
     }
 }
