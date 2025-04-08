@@ -12,6 +12,7 @@ class Product extends Model
         'designation',
         'quantity',
         'unit_price',
+        'image_url'
     ];
 
     public function invoiceLines()

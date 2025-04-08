@@ -1,10 +1,10 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\Supplier;
+use App\Models\Product;
 use App\Core\ViewRenderer;
 
-class SupplierController
+class ProductController
 {
     use ViewRenderer;
     protected $basePath;
@@ -32,132 +32,132 @@ class SupplierController
         }
     
         // Pagination avec tri
-        $suppliers = Supplier::orderBy($sort, $direction)->paginate($perPage);
+        $products = Product::orderBy($sort, $direction)->paginate($perPage);
     
-        $this->render('app', 'suppliers/index', [
-            'suppliers' => $suppliers,
-            'title' => 'Liste des fournisseurs',
+        $this->render('app', 'products/index', [
+            'products' => $products,
+            'title' => 'Liste des Produits',
             'sort' => $sort,
             'direction' => $direction,
         ]);
     }
     public function create()
     {
-        $this->render('app', 'suppliers/create', [
-            'title' => 'Ajouter un fournisseur'
+        $this->render('app', 'products/create', [
+            'title' => 'Ajouter un produit'
         ]);
     }
 
     public function store()
     {
         $data = [
-            'name' => trim($_POST['name']),
-            'phone' => trim($_POST['phone'])
+            'designation' => trim($_POST['designation']),
+            'unit_price' => trim($_POST['unit_price'])
             
         ];
 
-        if (empty($data['name'])) {
+        if (empty($data['designation'])) {
             http_response_code(400);
             echo "Le nom est obligatoire";
             return;
         }
-        if (empty($data['phone'])) {
+        if (empty($data['unit_price'])) {
             http_response_code(400);
-            echo "Le nom est obligatoire";
+            echo "Le prix unitaire est obligatoire";
             return;
         }
 
 
-        Supplier::create($data);
+        Product::create($data);
 
         $_SESSION['flash'] = [
             'type' => 'success',
-            'message' => 'fournisseur créé avec succès'
+            'message' => 'produit créé avec succès'
         ];
-        header('Location: ' . $this->basePath . '/supplier');
+        header('Location: ' . $this->basePath . '/product');
     }
 
     public function edit($id)
     {
         
-        $supplier = Supplier::where('id', $id)->first();
-        if (!$supplier) {
+        $product = Product::where('id', $id)->first();
+        if (!$product) {
             http_response_code(404);
-            echo "fournisseur non trouvé";
+            echo "produit non trouvé";
             return;
         }
 
 
 
-        $this->render('app', 'suppliers/edit', [
-            'supplier' => $supplier,
-            'title' => 'Modifier le fournisseur'
+        $this->render('app', 'products/edit', [
+            'product' => $product,
+            'title' => 'Modifier le produit'
         ]);
     }
 
     public function update($id)
     {
       
-        $supplier = Supplier::where('id', $id)->first();
+        $product = Product::where('id', $id)->first();
 
-        if (!$supplier) {
+        if (!$product) {
             http_response_code(404);
-            echo "fournisseur non trouvé";
+            echo "produit non trouvé";
             return;
         }
 
         $data = [
-            'name' => trim($_POST['name']),
-            'phone' => trim($_POST['phone'])
+            'designation' => trim($_POST['designation']),
+            'unit_price' => trim($_POST['unit_price'])
         ];
 
-        if (empty($data['name'])) {
+        if (empty($data['designation'])) {
             http_response_code(400);
             echo "Le nom est obligatoire";
             return;
         }
-        if (empty($data['phone'])) {
+        if (empty($data['unit_price'])) {
             http_response_code(400);
             echo "Le numero de telephone est obligatoire";
             return;
         }
 
 
-        $supplier->update($data);
+        $product->update($data);
         $_SESSION['flash'] = [
             'type' => 'success',
-            'message' => 'fournisseur modifié avec succès'
+            'message' => 'produit modifié avec succès'
         ];
-        header('Location: ' . $this->basePath . '/supplier');
+        header('Location: ' . $this->basePath . '/product');
     }
 
     public function delete($id)
     {
-        //$supplier = Supplier::find($id);
-        $supplier = Supplier::where('id', $id)->first();
+        //$product = Product::find($id);
+        $product = Product::where('id', $id)->first();
         
-        if (!$supplier) {
+        if (!$product) {
             http_response_code(404);
-            echo "fournisseur non trouvé";
+            echo "produit non trouvé";
             return;
         }
 
-        $supplier->delete();
+        $product->delete();
         $_SESSION['flash'] = [
             'type' => 'success',
-            'message' => 'fournisseur supprimé avec succès'
+            'message' => 'produit supprimé avec succès'
         ];
-        header('Location: ' . $this->basePath . '/supplier');
+        header('Location: ' . $this->basePath . '/product');
     }
 
     public function export()
 {
-    $suppliers = Supplier::all();
+    $products = Product::all();
 
     // En-têtes du fichier CSV
     $headers = [
         'Content-Type' => 'text/csv',
-        'Content-Disposition' => 'attachment; filename="suppliers.csv"',
+        'Content-Disposition' => 'attachment; filename="products.csv"',
     ];
 
     // Ouvrir un flux de sortie pour le fichier CSV
@@ -166,9 +166,9 @@ class SupplierController
     // Écrire les en-têtes du CSV
     fputcsv($output, ['ID', 'Nom', 'Téléphone']);
 
-    // Écrire les données des fournisseurs
-    foreach ($suppliers as $supplier) {
-        fputcsv($output, [$supplier->id, $supplier->name, $supplier->phone]);
+    // Écrire les données des produits
+    foreach ($products as $product) {
+        fputcsv($output, [$product->id, $product->name, $product->phone]);
     }
 
     // Fermer le flux de sortie
@@ -176,7 +176,7 @@ class SupplierController
 
     // Envoyer les en-têtes et le fichier CSV
     header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="suppliers.csv"');
+    header('Content-Disposition: attachment; filename="products.csv"');
     exit();
 }
    
