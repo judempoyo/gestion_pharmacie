@@ -13,15 +13,15 @@ $includePasswordField = $includePasswordField ?? false;
 ?>
 
 <!-- Modal de confirmation -->
-<div id="<?= $modalId ?>" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800">
-        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100"><?= $title ?></h2>
+<div id="<?= $modalId ?>" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-transparent bg-opacity-50">
+    <div class="p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-gray-100"><?= $title ?></h2>
         <p class="mb-6 text-gray-700 dark:text-gray-300"><?= $message ?></p>
         
         <form id="<?= $modalId ?>Form" action="<?= $formAction ?>" method="POST">
             <?php if ($includePasswordField): ?>
                 <div class="mb-4">
-                    <label class="block text-gray-700 mb-2 dark:text-gray-300">Mot de passe</label>
+                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Mot de passe</label>
                     <input type="password" name="password" required
                            class="w-full px-3 py-2 border rounded dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
                 </div>
@@ -29,11 +29,11 @@ $includePasswordField = $includePasswordField ?? false;
             
             <div class="flex justify-end space-x-4">
                 <button type="button" onclick="closeModal('<?= $modalId ?>')"
-                        class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-800">
+                        class="px-4 py-2 text-white bg-gray-500 rounded hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-800">
                     <?= $cancelText ?>
                 </button>
                 <button type="submit"
-                        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
+                        class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600 dark:bg-red-700 dark:hover:bg-red-800">
                     <?= $submitText ?>
                 </button>
             </div>
