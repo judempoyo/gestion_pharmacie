@@ -94,7 +94,7 @@ $modelName = $modelName ?? 'default';
                 <?php if ($data && $data->count() > 0): ?>
                     <?php foreach ($data as $item): ?>
                         <tr
-                            class="z-10 transition duration-500 hover:bg-gray-50 dark:hover:bg-gray-800 animate__animated animate__fadeIn">
+                            class="">
                             <?php foreach ($columns as $column): ?>
                                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                                     <?= $item[$column['key']] ?>
@@ -118,7 +118,7 @@ $modelName = $modelName ?? 'default';
                                         <!-- Menu déroulant -->
                                         <div id="actions-<?= $item['id'] ?>"
                                             class="absolute right-0 z-50 hidden w-48 mt-2 bg-white rounded-lg shadow-lg dark:bg-gray-700 ring-1 ring-black ring-opacity-5 animate__animated animate__fadeIn ">
-                                            <div class="py-1">
+                                            <div class="z-50 py-1">
                                                 <?php foreach ($actions as $action): ?>
                                                     <?php if (isset($action['type']) && $action['type'] === 'delete'): ?>
                                                         <!-- Bouton pour ouvrir le modal de suppression -->
