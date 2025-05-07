@@ -8,7 +8,7 @@ Ce projet est une application de gestion pour un studio photo, développée en P
 - Gestion des clients
 - Gestion des séances photo
 - Génération de factures
-- Tableau de bord avec statistiques
+- Tableau de bord avec statistiques détaillées 
 
 ## Prérequis
 
