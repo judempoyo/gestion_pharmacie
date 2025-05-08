@@ -1,6 +1,6 @@
 # Gestion Studio Photo
 
-Ce projet est une application de gestion pour un studio photo, développée en PHP et utilisant TailwindCSS pour le design.
+Ce projet consiste à mettre en place une application de gestion pour un studio photo, développée en PHP et utilisant TailwindCSS pour le design.
 
 ## Fonctionnalités
 
