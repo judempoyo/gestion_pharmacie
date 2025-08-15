@@ -1,37 +1,32 @@
-#wrapper.sidebar-mini #sidebar .sidebar-text {
+
+ .sidebar-mini .sidebar-text {
   display: none;
 }
 
-#wrapper:not(.sidebar-mini) #sidebar .sidebar-text {
-  display: block;
+.sidebar-mini #sidebar {
+  width: 5rem; /* w-20 */
 }
 
-#wrapper.sidebar-mini .toggle-button .sidebar-mini-icon {
-  display: block;
+.sidebar-mini #sidebar a {
+  justify-content: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
-#wrapper:not(.sidebar-mini) .toggle-button .sidebar-mini-icon {
-  display: none;
+.sidebar-mini #sidebar a svg {
+  margin-right: 0;
 }
 
-#wrapper.sidebar-mini .toggle-button .sidebar-icon {
-  display: none;
+.sidebar-mini #sidebar .flex.items-center.justify-center {
+  flex-direction: column;
 }
 
-
-#wrapper:not(.sidebar-mini) .toggle-button .sidebar-icon {
-  display: block;
+.sidebar-mini #sidebar h1 {
+  flex-direction: column;
+  align-items: center;
 }
 
-#sidebar {
-  transition: width 0.3s ease;
+.sidebar-mini #sidebar h1 span {
+  margin-left: 0;
+  margin-top: 0.5rem;
 }
-
-.toggle-button {
-  transition: background-color 0.2s ease;
-}
-
-.sidebar-text {
-  transition: opacity 0.3s ease;
-}
-
