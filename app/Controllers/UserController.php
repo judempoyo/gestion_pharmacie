@@ -17,7 +17,7 @@ class USerController
     {
         $this->session = new SessionManager();
         $this->session->start();
-        $this->basePath = '/Projets/gestion_pharmacie/public';
+        $this->basePath = '/Projets/autres/gestion_pharmacie/public';
     }
 
     public function showProfile()

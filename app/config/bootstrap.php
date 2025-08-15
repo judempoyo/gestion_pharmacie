@@ -9,7 +9,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 // Configuration de base
 define('BASE_PATH', realpath(__DIR__ . '/..'));
 define('PUBLIC_PATH', BASE_PATH . '/public/');
-define('PUBLIC_URL', 'http://jump.localhost/Projets/gestion_pharmacie/public/');
+define('PUBLIC_URL', 'http://jump.localhost/Projets/autres/gestion_pharmacie/public/');
 
 
 
@@ -33,7 +33,7 @@ Paginator::currentPageResolver(function ($pageName = 'page') {
     return isset($_GET[$pageName]) ? $_GET[$pageName] : 1;
 });
 
-$basePath = '/Projets/gestion_pharmacie/public'; // Chemin de base de votre projet
+$basePath = '/Projets/autres/gestion_pharmacie/public'; // Chemin de base de votre projet
 
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');

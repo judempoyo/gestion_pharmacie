@@ -34,9 +34,9 @@
             $currentRoute = $_SERVER['REQUEST_URI'];
 
             $hideBackButton = in_array($currentRoute, [
-                '/Projets/gestion_pharmacie/public/dashboard',
-                '/Projets/gestion_pharmacie/public/customer',
-                '/Projets/gestion_pharmacie/public/booking',
+                '/Projets/autres/gestion_pharmacie/public/dashboard',
+                '/Projets/autres/gestion_pharmacie/public/customer',
+                '/Projets/autres/gestion_pharmacie/public/booking',
             ]);
 
             if (!$hideBackButton): ?>

@@ -14,7 +14,7 @@ class PurchaseController
 
     public function __construct()
     {
-        $this->basePath = '/Projets/gestion_pharmacie/public';
+        $this->basePath = '/Projets/autres/gestion_pharmacie/public';
     }
 
     public function index()
