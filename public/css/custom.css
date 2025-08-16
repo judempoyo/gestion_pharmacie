@@ -1,32 +1,23 @@
-
- .sidebar-mini .sidebar-text {
-  display: none;
+/* Dans votre custom.css */
+#sidebar {
+    transition: width 0.3s ease, transform 0.3s ease;
 }
 
-.sidebar-mini #sidebar {
-  width: 5rem; /* w-20 */
+.sidebar-icon {
+    min-width: 2.5rem; /* 40px */
 }
 
-.sidebar-mini #sidebar a {
-  justify-content: center;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+/* Pour les icônes dans la sidebar réduite */
+.sidebar-collapsed .sidebar-icon {
+    margin-right: 0;
 }
 
-.sidebar-mini #sidebar a svg {
-  margin-right: 0;
+/* Animation des icônes */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.sidebar-mini #sidebar .flex.items-center.justify-center {
-  flex-direction: column;
-}
-
-.sidebar-mini #sidebar h1 {
-  flex-direction: column;
-  align-items: center;
-}
-
-.sidebar-mini #sidebar h1 span {
-  margin-left: 0;
-  margin-top: 0.5rem;
+.sidebar-text {
+    animation: fadeIn 0.3s ease;
 }

@@ -27,12 +27,23 @@ function toggleSidebar() {
   wrapper.classList.toggle('sidebar-mini');
   
   const sidebar = document.getElementById('sidebar');
+   const mainContent = document.querySelector('main');
+    const headerTitle = document.querySelector('header h2');
+
   if (wrapper.classList.contains('sidebar-mini')) {
       sidebar.classList.remove('w-64');
       sidebar.classList.add('w-20');
+        mainContent.classList.add('md:ml-20');
+        mainContent.classList.remove('md:ml-64');
+        headerTitle.classList.add('ml-20');
+        headerTitle.classList.remove('ml-64');
   } else {
       sidebar.classList.remove('w-20');
       sidebar.classList.add('w-64');
+       mainContent.classList.add('md:ml-64');
+        mainContent.classList.remove('md:ml-20');
+        headerTitle.classList.add('ml-64');
+        headerTitle.classList.remove('ml-20');
   }
   
 

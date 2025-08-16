@@ -59,10 +59,13 @@ class DashboardController
                 
             // Données pour les graphiques
             'salesChart' => $this->getSalesChartData(),
-            'inventoryChart' => $this->getInventoryChartData()
+            'inventoryChart' => $this->getInventoryChartData(),
+            'title' => 'Tableau de bord'
         ];
 
         $this->render('app', 'dashboard', $data);
+
+    
     }
 
     protected function getSalesChartData()

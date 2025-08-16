@@ -1,5 +1,5 @@
 <div class="min-h-screen p-4 bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto">
+    <div class="mx-auto">
         <h1 class="mb-8 text-3xl font-bold text-gray-900 dark:text-white animate-fade-in-down">
             Tableau de bord pharmacie
             <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
@@ -165,10 +165,10 @@
         <!-- Meilleurs produits -->
         <div class="p-6 mb-8 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg animate-fade-in-up">
             <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Meilleurs produits</h2>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <?php foreach ($topProducts as $product): ?>
-                <div class="p-4 transition-all border rounded-lg hover:shadow-md dark:border-gray-700">
-                    <div class="text-lg font-medium text-gray-900 dark:text-white"><?= htmlspecialchars($product->designation) ?></div>
+                <div class="p-4 transition-all bg-gray-50 dark:bg-gray-700 rounded-lg hover:shadow-md ">
+                    <div class="text-md font-medium text-gray-900 dark:text-white"><?= htmlspecialchars($product->designation) ?></div>
                     <div class="flex items-center justify-between mt-2">
                         <span class="text-sm text-gray-500 dark:text-gray-400">Ventes: <?= $product->sales_count ?? 0 ?></span>
                         <span class="text-sm font-semibold text-blue-600 dark:text-blue-400"><?= number_format($product->unit_price, 0, ',', ' ') ?> FC</span>
