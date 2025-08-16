@@ -3,7 +3,9 @@ namespace App\Controllers;
 
 use App\Models\Product;
 use App\Core\ViewRenderer;
-
+use Jump\JumpDataTable\DataAction;
+use Jump\JumpDataTable\DataColumn;
+use Jump\JumpDataTable\DataTable;
 class ProductController
 {
     use ViewRenderer;
@@ -15,30 +17,66 @@ class ProductController
     }
 
     public function index()
-    {
-        $perPage = 10; 
-        $sort = $_GET['sort'] ?? 'id'; 
-        $direction = $_GET['direction'] ?? 'asc'; 
-    
-        $allowedSorts = ['id', 'designation', 'unit_price']; 
-        $allowedDirections = ['asc', 'desc'];
-    
-        if (!in_array($sort, $allowedSorts)) {
-            $sort = 'id';
-        }
-        if (!in_array($direction, $allowedDirections)) {
-            $direction = 'asc';
-        }
-    
-        $products = Product::orderBy($sort, $direction)->paginate($perPage);
-    
-        $this->render('app', 'products/index', [
-            'products' => $products,
-            'title' => 'Liste des Produits',
+{
+    $perPage = 10;
+    $currentPage = $_GET['page'] ?? 1;
+    $sort = $_GET['sort'] ?? 'id';
+    $direction = $_GET['direction'] ?? 'asc';
+    $search = $_GET['search'] ?? '';
+
+    $allowedSorts = ['id', 'designation', 'quantity', 'unit_price'];
+    $allowedDirections = ['asc', 'desc'];
+
+    if (!in_array($sort, $allowedSorts))
+        $sort = 'id';
+    if (!in_array($direction, $allowedDirections))
+        $direction = 'asc';
+
+    $query = Product::query();
+
+    if (!empty($search)) {
+        $query->where(function ($q) use ($search) {
+            $q->where('designation', 'LIKE', "%{$search}%")
+                ->orWhere('quantity', 'LIKE', "%{$search}%")
+                ->orWhere('unit_price', 'LIKE', "%{$search}%");
+        });
+    }
+
+    $totalItems = $query->count();
+    $offset = ($currentPage - 1) * $perPage;
+    $products = $query->orderBy($sort, $direction)
+        ->offset($offset)
+        ->limit($perPage)
+        ->get()
+        ->toArray();
+
+    $table = DataTable::make()
+        ->title('Liste des Produits')
+        ->modelName('product')
+        ->createUrl($this->basePath . '/product/create')
+        ->publicUrl($this->basePath)
+        ->addColumn((new DataColumn('id', 'ID'))->sortable())
+        ->addColumn((new DataColumn('designation', 'Désignation'))->searchable())
+        ->addColumn((new DataColumn('quantity', 'Quantité'))->sortable())
+        ->addColumn((new DataColumn('unit_price', 'Prix Unitaire'))->sortable())
+        ->addAction(DataAction::edit('Modifier', fn($item) => $this->basePath . '/product/' . 'edit/' . $item['id']))
+        ->addAction(DataAction::delete('Supprimer', fn($item) => $this->basePath . '/product/' . 'delete/' . $item['id']))
+        ->data($products)
+        ->enableRowSelection(true)
+        ->setBulkActions([
+            DataAction::delete('Supprimer', fn($item) => "/delete/{$item}"),
+        ])
+        ->paginate($totalItems, $perPage, $currentPage, $this->basePath . '/product', [
             'sort' => $sort,
             'direction' => $direction,
+            'search' => $search
         ]);
-    }
+
+    $this->render('app', 'products/index', [
+        'datatable' => $table->render(),
+        'title' => 'Liste des Produits'
+    ]);
+}
 
     public function create()
     {

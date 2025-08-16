@@ -6,6 +6,9 @@ use App\Models\InvoiceLine;
 use App\Models\Product;
 use App\Models\Customer;
 use App\Core\ViewRenderer;
+use Jump\JumpDataTable\DataAction;
+use Jump\JumpDataTable\DataColumn;
+use Jump\JumpDataTable\DataTable;
 
 class InvoiceController
 {
@@ -17,41 +20,78 @@ class InvoiceController
         $this->basePath = '/Projets/autres/gestion_pharmacie/public';
     }
 
-    public function index()
-    {
-        $perPage = 10; 
-        $sort = $_GET['sort'] ?? 'id'; 
-        $direction = $_GET['direction'] ?? 'asc'; 
-    
-        
-        $allowedSorts = ['id', 'customers.name', 'total_amount']; // Champs autorisés pour le tri
-        $allowedDirections = ['asc', 'desc']; // Directions autorisées
-    
-        if (!in_array($sort, $allowedSorts)) {
-            $sort = 'id';
-        }
-        if (!in_array($direction, $allowedDirections)) {
-            $direction = 'asc';
-        }
-    
-        // Pagination avec tri
-        $invoices = Invoice::with('customer')->orderBy('id', 'desc')->paginate($perPage);
-    
-        $this->render('app', 'invoices/index', [
-            'invoices' => $invoices,
-            'title' => 'Liste des Factures',
-            'sort' => $sort,
-            'direction' => $direction,
-        ]);
-        /* $perPage = 10;
-        $invoices = Invoice::with('customer')->orderBy('id', 'desc')->paginate($perPage);
+  public function index()
+{
+    $perPage = 10;
+    $currentPage = $_GET['page'] ?? 1;
+    $sort = $_GET['sort'] ?? 'id';
+    $direction = $_GET['direction'] ?? 'asc';
+    $search = $_GET['search'] ?? '';
 
-        $this->render('app', 'invoices/index', [
-            'invoices' => $invoices,
-            'title' => 'Liste des Factures'
-        ]); */
+    $allowedSorts = ['id', 'customer_id', 'total_amount'];
+    $allowedDirections = ['asc', 'desc'];
+
+    if (!in_array($sort, $allowedSorts))
+        $sort = 'id';
+    if (!in_array($direction, $allowedDirections))
+        $direction = 'asc';
+
+    $query = Invoice::with('customer');
+
+    if (!empty($search)) {
+        $query->where(function ($q) use ($search) {
+            $q->where('total_amount', 'LIKE', "%{$search}%")
+                ->orWhereHas('customer', function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%");
+                });
+        });
     }
 
+    $totalItems = $query->count();
+    $offset = ($currentPage - 1) * $perPage;
+    $invoices = $query->orderBy($sort, $direction)
+        ->offset($offset)
+        ->limit($perPage)
+        ->get()
+        ->toArray();
+
+    // Format data for DataTable
+    $formattedData = array_map(function($invoice) {
+        return [
+            'id' => $invoice['id'],
+            'customer_name' => $invoice['customer']['name'] ?? 'N/A',
+            'total_amount' => $invoice['total_amount'],
+            'created_at' => $invoice['created_at']
+        ];
+    }, $invoices);
+
+    $table = DataTable::make()
+        ->title('Liste des Factures')
+        ->modelName('invoice')
+        ->createUrl($this->basePath . '/invoice/create')
+        ->publicUrl($this->basePath)
+        ->addColumn((new DataColumn('id', 'ID'))->sortable())
+        ->addColumn((new DataColumn('customer_name', 'Client'))->searchable())
+        ->addColumn((new DataColumn('total_amount', 'Montant Total'))->sortable())
+        ->addColumn((new DataColumn('created_at', 'Date')))
+        ->addAction(DataAction::edit('Modifier', fn($item) => $this->basePath . '/invoice/' . 'edit/' . $item['id']))
+        ->addAction(DataAction::delete('Supprimer', fn($item) => $this->basePath . '/invoice/' . 'delete/' . $item['id']))
+        ->data($formattedData)
+        ->enableRowSelection(true)
+        ->setBulkActions([
+            DataAction::delete('Supprimer', fn($item) => "/delete/{$item}"),
+        ])
+        ->paginate($totalItems, $perPage, $currentPage, $this->basePath . '/invoice', [
+            'sort' => $sort,
+            'direction' => $direction,
+            'search' => $search
+        ]);
+
+    $this->render('app', 'invoices/index', [
+        'datatable' => $table->render(),
+        'title' => 'Liste des Factures'
+    ]);
+}
     public function create()
     {
         $customers = Customer::all();

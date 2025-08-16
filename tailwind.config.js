@@ -3,7 +3,8 @@ module.exports = {
   content: [
       './app/Views/**/*.php',
     './app/helpers/**/*.php',
-    './public/**/*.html'
+    './public/**/*.html',
+    '/vendor/jump/jump-datatable/src/Resources/views/**/*.php'
   ],
   theme: {
     extend: {},

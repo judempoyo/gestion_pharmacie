@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<?= PUBLIC_URL ?>css/output.css" rel="stylesheet">
     <link href="<?= PUBLIC_URL ?>css/custom.css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@material-tailwind/html@latest/styles/material-tailwind.css" />
 
     <title> <?= htmlspecialchars($title) ?? 'gestion_pharmacie' ?></title>
 </head>
@@ -48,6 +49,7 @@
 
 
     <script src="<?= PUBLIC_URL ?>js/main.js"></script>
+    <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/script-name.js"></script>
 
 </body>
 
