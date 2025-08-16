@@ -1,58 +1,65 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\Product;
-use App\Models\Invoice;
-use App\Models\Purchase;
-use App\Services\SessionManager;
-use App\Models\Supplier;
-use App\Models\Customer;
-use App\Models\User;
 use App\Core\ViewRenderer;
+use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\Product;
+use App\Models\Purchase;
+use App\Models\Supplier;
+use App\Models\User;
+use Carbon\Carbon;
 
 class DashboardController
 {
     use ViewRenderer;
-    protected $session;
-
     protected $basePath;
 
     public function __construct()
     {
-        $this->session = new SessionManager();
-        $this->session->start();
         $this->basePath = '/Projets/autres/gestion_pharmacie/public';
     }
 
     public function index()
     {
-        // Récupérer l'utilisateur connecté (à adapter selon votre système d'authentification)
-        if ($this->session->has('user')) {
-            $user = User::find($this->session->get('user'));
-        }
-            
         // Statistiques principales
         $data = [
-            'user' => $user,
             'totalProducts' => Product::count(),
             'criticalStock' => Product::where('quantity', '<', 5)->count(),
-            'monthlySales' => Invoice::whereMonth('created_at', date('m'))->sum('total_amount'),
-            'pendingOrders' => Purchase::count(),
+            'outOfStock' => Product::where('quantity', '<=', 0)->count(),
+            'monthlySales' => Invoice::whereBetween('created_at', [
+                Carbon::now()->startOfMonth(),
+                Carbon::now()->endOfMonth()
+            ])->sum('total_amount'),
+            'monthlyPurchases' => Purchase::whereBetween('created_at', [
+                Carbon::now()->startOfMonth(),
+                Carbon::now()->endOfMonth()
+            ])->sum('total_amount'),
             
             // Produits en rupture de stock
             'lowStockProducts' => Product::where('quantity', '<', 5)
                 ->orderBy('quantity')
-                ->limit(5)
+                ->limit(10)
                 ->get(),
                 
             // Dernières ventes
             'recentInvoices' => Invoice::with('customer')
                 ->orderBy('created_at', 'desc')
+                ->limit(8)
+                ->get(),
+                
+            // Derniers achats
+            'recentPurchases' => Purchase::with('supplier')
+                ->orderBy('created_at', 'desc')
                 ->limit(5)
                 ->get(),
                 
-            // Données pour le graphique des ventes
-            'salesChart' => $this->getSalesChartData()
+            // Meilleurs produits
+            'topProducts' => $this->getTopSellingProducts(),
+                
+            // Données pour les graphiques
+            'salesChart' => $this->getSalesChartData(),
+            'inventoryChart' => $this->getInventoryChartData()
         ];
 
         $this->render('app', 'dashboard', $data);
@@ -60,23 +67,74 @@ class DashboardController
 
     protected function getSalesChartData()
     {
-        // Générer des données pour les 6 derniers mois
         $labels = [];
-        $data = [];
+        $salesData = [];
+        $purchasesData = [];
         
         for ($i = 5; $i >= 0; $i--) {
-            $month = date('m', strtotime("-$i months"));
-            $year = date('Y', strtotime("-$i months"));
+            $date = Carbon::now()->subMonths($i);
+            $month = $date->format('m');
+            $year = $date->format('Y');
             
-            $labels[] = date('M Y', strtotime("-$i months"));
-            $data[] = Invoice::whereMonth('created_at', $month)
+            $labels[] = $date->format('M Y');
+            $salesData[] = Invoice::whereMonth('created_at', $month)
+                ->whereYear('created_at', $year)
+                ->sum('total_amount');
+                
+            $purchasesData[] = Purchase::whereMonth('created_at', $month)
                 ->whereYear('created_at', $year)
                 ->sum('total_amount');
         }
         
         return [
             'labels' => $labels,
-            'data' => $data
+            'datasets' => [
+                [
+                    'label' => 'Ventes',
+                    'data' => $salesData,
+                    'backgroundColor' => 'rgba(16, 185, 129, 0.7)',
+                    'borderColor' => 'rgba(16, 185, 129, 1)',
+                ],
+                [
+                    'label' => 'Achats',
+                    'data' => $purchasesData,
+                    'backgroundColor' => 'rgba(99, 102, 241, 0.7)',
+                    'borderColor' => 'rgba(99, 102, 241, 1)',
+                ]
+            ]
         ];
     }
+
+    protected function getInventoryChartData()
+    {
+        $categories = [
+            'En stock' => Product::where('quantity', '>', 10)->count(),
+            'Stock faible' => Product::whereBetween('quantity', [1, 10])->count(),
+            'Rupture' => Product::where('quantity', '<=', 0)->count()
+        ];
+        
+        return [
+            'labels' => array_keys($categories),
+            'data' => array_values($categories),
+            'colors' => [
+                'rgba(16, 185, 129, 0.7)',
+                'rgba(234, 179, 8, 0.7)',
+                'rgba(239, 68, 68, 0.7)'
+            ]
+        ];
+    }
+
+    protected function getTopSellingProducts()
+{
+    return Product::query()
+        ->select('products.*')
+        ->selectSub(function($query) {
+            $query->from('invoice_lines')
+                ->whereColumn('invoice_lines.product_id', 'products.id')
+                ->selectRaw('SUM(quantity)');
+        }, 'sales_count')
+        ->orderBy('sales_count', 'desc')
+        ->limit(5)
+        ->get();
+}
 }

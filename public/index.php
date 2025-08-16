@@ -6,8 +6,17 @@ require_once __DIR__ . '/../app/config/bootstrap.php';
 require_once __DIR__ . '/../app/helpers/flash.php';
 
 
+use App\Models\Product;
 use FastRoute\Dispatcher;
 
+
+// Après l'initialisation d'Eloquent
+if (Product::count() === 0) {
+    $seeder = new \App\Database\Seeders\DatabaseSeeder();
+    $seeder->run();
+    
+    error_log("Données pharmaceutiques par défaut chargées avec succès");
+}
 
 // Gestion de la requête
 $httpMethod = $_SERVER['REQUEST_METHOD'];
