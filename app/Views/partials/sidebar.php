@@ -31,6 +31,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                 </svg>
+            </div>
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white sidebar-text">
                     <span class="text-gray-700  dark:text-gray-300">Gestion Pharmacie</span>
                 </h1>
@@ -54,8 +55,7 @@
                     </a>
                 </li>
 
-                </a>
-                </li>
+        
                 <li>
                     <a href="<?= PUBLIC_URL ?>product"
                         class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'product') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
@@ -159,6 +159,7 @@
         <!-- Effet de flou pour le contenu principal -->
         <div id="contentBlur" class="fixed inset-0 z-40 hidden backdrop-blur-sm md:hidden"></div>
     </div>
+ 
 
     <script>
 

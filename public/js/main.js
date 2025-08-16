@@ -23,15 +23,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.toggle('w-20'); // Réduit la largeur du sidebar
-  const wrapper = document.getElementById('wrapper');
-  wrapper.classList.toggle('sidebar-mini'); // Ajoute ou supprime la classe 'sidebar-mini'
-}
-
-function toggleSidebar() {
   const wrapper = document.getElementById('wrapper');
   wrapper.classList.toggle('sidebar-mini');
+  
   const sidebar = document.getElementById('sidebar');
   if (wrapper.classList.contains('sidebar-mini')) {
       sidebar.classList.remove('w-64');
@@ -40,7 +34,23 @@ function toggleSidebar() {
       sidebar.classList.remove('w-20');
       sidebar.classList.add('w-64');
   }
+  
+
+  localStorage.setItem('sidebarCollapsed', wrapper.classList.contains('sidebar-mini'));
 }
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const wrapper = document.getElementById('wrapper');
+  const sidebar = document.getElementById('sidebar');
+  const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+  
+  if (isCollapsed) {
+      wrapper.classList.add('sidebar-mini');
+      sidebar.classList.remove('w-64');
+      sidebar.classList.add('w-20');
+  }
+});
 
 // Fonction pour revenir à la page précédente
 function goBack() {
