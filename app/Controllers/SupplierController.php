@@ -3,6 +3,9 @@ namespace App\Controllers;
 
 use App\Models\Supplier;
 use App\Core\ViewRenderer;
+use Jump\JumpDataTable\DataAction;
+use Jump\JumpDataTable\DataColumn;
+use Jump\JumpDataTable\DataTable;
 
 class SupplierController
 {
@@ -11,36 +14,71 @@ class SupplierController
 
     public function __construct()
     {
-        $this->basePath = '/Projets/gestion_pharmacie/public';
+        $this->basePath = BASE_URL_PATH;
     }
 
     public function index()
-    {
-        $perPage = 10; 
-        $sort = $_GET['sort'] ?? 'id'; 
-        $direction = $_GET['direction'] ?? 'asc'; 
-    
-        
-        $allowedSorts = ['id', 'name']; 
-        $allowedDirections = ['asc', 'desc']; // Directions autorisées
-    
-        if (!in_array($sort, $allowedSorts)) {
-            $sort = 'id';
-        }
-        if (!in_array($direction, $allowedDirections)) {
-            $direction = 'asc';
-        }
-    
-        // Pagination avec tri
-        $suppliers = Supplier::orderBy($sort, $direction)->paginate($perPage);
-    
-        $this->render('app', 'suppliers/index', [
-            'suppliers' => $suppliers,
-            'title' => 'Liste des fournisseurs',
+{
+    $perPage = 10;
+    $currentPage = $_GET['page'] ?? 1;
+    $sort = $_GET['sort'] ?? 'id';
+    $direction = $_GET['direction'] ?? 'asc';
+    $search = $_GET['search'] ?? '';
+
+    $allowedSorts = ['id', 'name', 'phone'];
+    $allowedDirections = ['asc', 'desc'];
+
+    if (!in_array($sort, $allowedSorts))
+        $sort = 'id';
+    if (!in_array($direction, $allowedDirections))
+        $direction = 'asc';
+
+    $query = Supplier::query();
+
+    if (!empty($search)) {
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('phone', 'LIKE', "%{$search}%");
+        });
+    }
+
+    $totalItems = $query->count();
+    $offset = ($currentPage - 1) * $perPage;
+    $suppliers = $query->orderBy($sort, $direction)
+        ->offset($offset)
+        ->limit($perPage)
+        ->get()
+        ->toArray();
+
+    $table = DataTable::make()
+        ->title('Liste des Fournisseurs')
+        ->modelName('supplier')
+        ->createUrl($this->basePath . '/supplier/create')
+        ->publicUrl($this->basePath)
+        ->addColumn((new DataColumn('id', 'ID'))->sortable())
+        ->addColumn((new DataColumn('name', 'Nom'))->searchable())
+        ->addColumn((new DataColumn('phone', 'Téléphone'))->searchable())
+        ->addColumn((new DataColumn('created_at', 'Date d\'ajout'))
+            ->sortable()
+            ->withRenderer(fn($item) => date('d/m/Y', strtotime($item['created_at']))))
+        ->addAction(DataAction::edit('Modifier', fn($item) => $this->basePath . '/supplier/' . 'edit/' . $item['id']))
+        ->addAction(DataAction::delete('Supprimer', fn($item) => $this->basePath . '/supplier/' . 'delete/' . $item['id']))
+        ->data($suppliers)
+        ->enableRowSelection(true)
+        ->setBulkActions([
+            DataAction::delete('Supprimer', fn($item) => "/delete/{$item}"),
+        ])
+        ->paginate($totalItems, $perPage, $currentPage, $this->basePath . '/supplier', [
             'sort' => $sort,
             'direction' => $direction,
+            'search' => $search
         ]);
-    }
+
+    $this->render('app', 'suppliers/index', [
+        'datatable' => $table->render(),
+        'title' => 'Liste des Fournisseurs'
+    ]);
+}
     public function create()
     {
         $this->render('app', 'suppliers/create', [

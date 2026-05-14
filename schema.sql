@@ -39,6 +39,7 @@ CREATE TABLE products (
     designation VARCHAR(255) NOT NULL,
     quantity INT NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL,
+    expiry_date DATE NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -46,11 +47,12 @@ CREATE TABLE products (
 -- Table: invoices
 CREATE TABLE invoices (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT NOT NULL,
+    customer_id INT NULL,
+    guest_name VARCHAR(255) NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+    FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL
 );
 
 -- Table: invoice_lines
@@ -86,6 +88,6 @@ CREATE TABLE purchase_lines (
     unit_price DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (purchase_id) REFERENCES purchase(id) ON DELETE CASCADE,
+    FOREIGN KEY (purchase_id) REFERENCES purchases(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );

@@ -1,9 +1,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /Projets/gestion_pharmacie/public/
     
+    # Rediriger vers index.php si le fichier ou le dossier n'existe pas
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ index.php [QSA,L]
+    RewriteRule ^ index.php [QSA,L]
 </IfModule>
 

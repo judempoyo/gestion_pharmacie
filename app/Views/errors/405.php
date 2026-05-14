@@ -25,7 +25,7 @@
             </a>
             <p class="mt-4 text-gray-500 dark:text-gray-400">
                 Besoin d'aide ? Contactez-nous à  
-                <a href="mailto:support@kongb.local" class="text-red-500 dark:text-red-400 hover:underline">support@kongb.local</a>
+                <a href="mailto:support@gestion_pharmacie.local" class="text-red-500 dark:text-red-400 hover:underline">support@gestion_pharmacie.local</a>
             </p>
         </div>
     </div>

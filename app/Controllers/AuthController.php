@@ -19,7 +19,7 @@ class AuthController
     {
         $this->session = new SessionManager();
         $this->session->start();
-        $this->basePath = '/Projets/gestion_pharmacie/public';
+        $this->basePath = BASE_URL_PATH;
     }
 
     // Afficher le formulaire de connexion
@@ -131,17 +131,6 @@ class AuthController
         header('Location: ' . $this->basePath . '/login');
         exit();
     }
-
-    // Tableau de bord
-    /* public function dashboard()
-    {
-        
-        $user = User::find($this->session->get('user'));
-        $this->render('app', 'auth/dashboard', [
-            'title' => 'Tableau de bord',
-            'user' => $user
-        ]);
-    } */
 
     // Afficher le formulaire de demande de réinitialisation du mot de passe
     public function showForgotPasswordForm()

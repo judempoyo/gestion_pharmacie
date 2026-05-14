@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="<?= PUBLIC_URL?>css/output.css" rel="stylesheet">
 
-    <title> <?= htmlspecialchars($title) ?? 'KONGB' ?></title>
+    <title> <?= htmlspecialchars($title) ?? 'gestion_pharmacie' ?></title>
 </head>
 <body class="bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white ">
 

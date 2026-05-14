@@ -1,208 +1,254 @@
-<div class="container px-4 py-8 mx-auto">
-    <h1 class="mb-6 text-3xl font-bold dark:text-white">Tableau de bord pharmacie</h1>
+<div class="min-h-screen p-4 bg-gray-50 dark:bg-gray-900">
+    <div class="mx-auto">
+        <h1 class="mb-8 text-3xl font-bold text-gray-900 dark:text-white animate-fade-in-down">
+            Tableau de bord pharmacie
+            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                <?= date('d/m/Y') ?>
+            </span>
+        </h1>
 
-    <!-- Cartes de statistiques -->
-    <div class="grid grid-cols-1 gap-5 mb-10 sm:grid-cols-2 lg:grid-cols-4">
-        <!-- Total produits -->
-        <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700">
-            <div class="flex items-center">
-                <div class="p-3 mr-4 bg-blue-100 rounded-full dark:bg-blue-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
+        <!-- Cartes de statistiques -->
+        <div class="grid grid-cols-1 gap-6 mb-10 sm:grid-cols-2 lg:grid-cols-4 animate-fade-in">
+            <!-- Total produits -->
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg hover:-translate-y-1">
+                <div class="flex items-center">
+                    <div class="p-3 mr-4 rounded-full bg-emerald-50 dark:bg-emerald-900/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Produits en stock</p>
+                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= $totalProducts ?? 0 ?></p>
+                    </div>
                 </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-300">Produits en stock</p>
-                    <p class="text-2xl font-bold dark:text-white"><?= $totalProducts ?></p>
+            </div>
+
+            <!-- Stock critique -->
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg hover:-translate-y-1">
+                <div class="flex items-center">
+                    <div class="p-3 mr-4 rounded-full bg-amber-50 dark:bg-amber-900/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Stock faible / Rupture</p>
+                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= ($criticalStock ?? 0) + ($outOfStock ?? 0) ?></p>
+                        <p class="text-xs text-amber-600 dark:text-amber-400"><?= $outOfStock ?? 0 ?> en rupture totale</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Péremption -->
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg hover:-translate-y-1">
+                <div class="flex items-center">
+                    <div class="p-3 mr-4 rounded-full bg-red-50 dark:bg-red-900/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Péremption</p>
+                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= $expiredProducts ?? 0 ?></p>
+                        <p class="text-xs text-red-600 dark:text-red-400"><?= $nearExpiry ?? 0 ?> expirent bientôt</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ventes du mois -->
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg hover:-translate-y-1">
+                <div class="flex items-center">
+                    <div class="p-3 mr-4 rounded-full bg-blue-50 dark:bg-blue-900/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Ventes du mois</p>
+                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= number_format($monthlySales ?? 0, 0, ',', ' ') ?> FC</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Stock critique -->
-        <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700">
-            <div class="flex items-center">
-                <div class="p-3 mr-4 bg-red-100 rounded-full dark:bg-red-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-red-600 dark:text-red-400" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
+        <!-- Graphiques -->
+        <div class="grid grid-cols-1 gap-8 mb-8 lg:grid-cols-2">
+            <!-- Graphique des ventes/achats -->
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg animate-fade-in">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Ventes et achats</h2>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">6 derniers mois</span>
                 </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-300">Stock critique</p>
-                    <p class="text-2xl font-bold dark:text-white"><?= $criticalStock ?></p>
+                <div class="relative h-64">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- État du stock -->
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg animate-fade-in">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">État du stock</h2>
+                </div>
+                <div class="relative h-64">
+                    <canvas id="inventoryChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Ventes du mois -->
-        <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700">
-            <div class="flex items-center">
-                <div class="p-3 mr-4 bg-green-100 rounded-full dark:bg-green-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-green-600 dark:text-green-400"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
+        <!-- Tableaux de vigilance -->
+        <div class="grid grid-cols-1 gap-8 mb-8 lg:grid-cols-3">
+            <!-- Produits en rupture -->
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-300">Ventes ce mois</p>
-                    <p class="text-2xl font-bold dark:text-white"><?= number_format($monthlySales, 2) ?> FC</p>
+                    Stock faible
+                </h2>
+                <div class="overflow-x-auto max-h-60">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                            <?php foreach ($lowStockProducts ?? [] as $product): ?>
+                            <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td class="px-2 py-3 text-sm font-medium text-gray-900 dark:text-white"><?= htmlspecialchars($product->designation) ?></td>
+                                <td class="px-2 py-3 text-sm text-right <?= ($product->quantity ?? 0) == 0 ? 'text-red-600 font-semibold' : 'text-amber-600' ?>">
+                                    <?= $product->quantity ?? 0 ?>
+                                </td>
+                                <td class="px-2 py-3 text-sm text-right">
+                                    <a href="<?= url('/purchase/create?product_id=' . ($product->id ?? '')) ?>" class="text-blue-600 hover:underline">Commander</a>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
 
-        <!-- Commandes fournisseurs -->
-        <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700">
-            <div class="flex items-center">
-                <div class="p-3 mr-4 bg-purple-100 rounded-full dark:bg-purple-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-purple-600 dark:text-purple-400"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            <!-- Produits expirant bientôt -->
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
+                    Péremption proche
+                </h2>
+                <div class="overflow-x-auto max-h-60">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                            <?php foreach ($expiringProducts ?? [] as $product): ?>
+                            <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td class="px-2 py-3 text-sm font-medium text-gray-900 dark:text-white"><?= htmlspecialchars($product->designation) ?></td>
+                                <td class="px-2 py-3 text-sm text-right">
+                                    <?php 
+                                    $class = 'expiry-safe';
+                                    if (isset($product->expiry_date)) {
+                                        $date = strtotime($product->expiry_date);
+                                        $now = time();
+                                        $diff = $date - $now;
+                                        $threeMonths = 3 * 30 * 24 * 60 * 60;
+                                        $sixMonths = 6 * 30 * 24 * 60 * 60;
+
+                                        if ($date < $now) $class = 'expiry-expired';
+                                        elseif ($diff <= $threeMonths) $class = 'expiry-critical';
+                                        elseif ($diff <= $sixMonths) $class = 'expiry-warning';
+                                    }
+                                    ?>
+                                    <span class="<?= $class ?>">
+                                        <?= isset($product->expiry_date) ? date('d/m/Y', strtotime($product->expiry_date)) : '-' ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
-                <div>
-                    <p class="text-gray-500 dark:text-gray-300">Commandes en cours</p>
-                    <p class="text-2xl font-bold dark:text-white"><?= $pendingOrders ?></p>
+            </div>
+
+            <!-- Dernières ventes -->
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
+                    </svg>
+                    Ventes récentes
+                </h2>
+                <div class="overflow-x-auto max-h-60">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                            <?php foreach ($recentInvoices ?? [] as $invoice): ?>
+                            <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td class="px-2 py-3 text-sm font-medium text-blue-600 dark:text-blue-400">
+                                    <a href="<?= url('/invoice/show/' . ($invoice->id ?? '')) ?>" class="hover:underline">#<?= $invoice->id ?? '' ?></a>
+                                </td>
+                                <td class="px-2 py-3 text-sm text-gray-900 dark:text-white"><?= htmlspecialchars($invoice->customer->name ?? 'Client inconnu') ?></td>
+                                <td class="px-2 py-3 text-sm text-right font-medium"><?= number_format($invoice->total_amount ?? 0, 0, ',', ' ') ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
-    <!-- Graphiques et tableaux -->
-    <div class="grid grid-cols-1 gap-8 mb-8 lg:grid-cols-2">
-        <!-- Graphique des ventes -->
-        <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700 dark:text-white">
-            <h2 class="mb-4 text-xl font-bold dark:text-white">Ventes mensuelles</h2>
-            <canvas id="salesChart" height="300"></canvas>
-        </div>
 
-        <!-- Produits en rupture -->
-        <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700">
-            <h2 class="mb-4 text-xl font-bold dark:text-white">Produits en rupture</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b dark:border-gray-600">
-                            <th class="py-2 text-left dark:text-white">Produit</th>
-                            <th class="py-2 text-right dark:text-white">Stock</th>
-                            <th class="py-2 text-right dark:text-white">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($lowStockProducts as $product): ?>
-                            <tr class="border-b dark:border-gray-600">
-                                <td class="py-2 dark:text-white"><?= htmlspecialchars($product->designation) ?></td>
-                                <td
-                                    class="text-right py-2 <?= $product->quantity == 0 ? 'text-red-600 font-bold' : 'text-yellow-600' ?>">
-                                    <?= $product->quantity ?>
-                                </td>
-                                <td class="py-2 text-right">
-                                    <a href="<?= PUBLIC_URL ?>purchase/create"
-                                        class="text-blue-600 hover:underline dark:text-blue-400">Commander</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- Dernières ventes -->
-    <div class="p-6 mb-8 bg-white rounded-lg shadow dark:bg-gray-700">
-        <h2 class="mb-4 text-xl font-bold dark:text-white">Dernières ventes</h2>
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead>
-                    <tr class="border-b dark:border-gray-600">
-                        <th class="py-2 text-left dark:text-white">N° Facture</th>
-                        <th class="py-2 text-left dark:text-white">Client</th>
-                        <th class="py-2 text-right dark:text-white">Montant</th>
-                        <th class="py-2 text-right dark:text-white">Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($recentInvoices as $invoice): ?>
-                        <tr class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600">
-                            <td class="py-2">
-                                <a href="<?= PUBLIC_URL ?>invoice/show/<?= $invoice->id ?>"
-                                    class="text-blue-600 hover:underline dark:text-blue-400">
-                                    #<?= $invoice->id ?>
-                                </a>
-                            </td>
-                            <td class="py-2 dark:text-white"><?= htmlspecialchars($invoice->customer->name) ?></td>
-                            <td class="py-2 text-right dark:text-white"><?= number_format($invoice->total_amount, 2) ?> FC
-                            </td>
-                            <td class="py-2 text-right dark:text-white"><?= $invoice->created_at->format('d/m/Y H:i') ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Informations utilisateur -->
-    <!-- <div class="p-6 bg-white rounded-lg shadow dark:bg-gray-700">
-        <h2 class="mb-4 text-xl font-bold dark:text-white">Votre compte</h2>
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-                <p class="text-gray-500 dark:text-gray-300">Nom complet</p>
-                <p class="text-lg dark:text-white"><?= htmlspecialchars($user->name) ?></p>
-            </div>
-            <div>
-                <p class="text-gray-500 dark:text-gray-300">Email</p>
-                <p class="text-lg dark:text-white"><?= htmlspecialchars($user->email) ?></p>
-            </div>
-         
-            <div>
-                <p class="text-gray-500 dark:text-gray-300">Compte créé le</p>
-                <p class="text-lg dark:text-white"><?= $user->created_at->format('d/m/Y') ?></p>
-            </div>
-        </div>
-        <div class="mt-6">
-            <a href="<?= PUBLIC_URL ?>profile" class="px-4 py-2 mr-2 text-white bg-blue-600 rounded hover:bg-blue-700">
-                Modifier le profil
-            </a>
-            <a href="<?= PUBLIC_URL ?>logout" class="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700">
-                Déconnexion
-            </a>
-        </div>
-    </div>
- -->
-
-<!-- Script pour le graphique -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const ctx = document.getElementById('salesChart').getContext('2d');
-        const salesChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: <?= json_encode($salesChart['labels']) ?>,
-                datasets: [{
-                    label: 'Ventes mensuelles (FC)',
-                    data: <?= json_encode($salesChart['data']) ?>,
-                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                    borderColor: 'rgba(59, 130, 246, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof Chart === 'undefined') return;
+
+        const isDark = document.documentElement.classList.contains('dark');
+        const textColor = isDark ? '#e5e7eb' : '#374151';
+        const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+        // Chart 1: Sales
+        const salesEl = document.getElementById('salesChart');
+        if (salesEl) {
+            const salesCtx = salesEl.getContext('2d');
+            const salesData = <?= json_encode($salesChart ?? ['labels' => [], 'datasets' => []]) ?>;
+            new Chart(salesCtx, {
+                type: 'line',
+                data: salesData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    tension: 0.3,
+                    plugins: {
+                        legend: { labels: { color: textColor } }
+                    },
+                    scales: {
+                        y: { grid: { color: gridColor }, ticks: { color: textColor } },
+                        x: { grid: { color: gridColor }, ticks: { color: textColor } }
                     }
                 }
-            }
-        });
+            });
+        }
+
+        // Chart 2: Inventory
+        const invEl = document.getElementById('inventoryChart');
+        if (invEl) {
+            const inventoryCtx = invEl.getContext('2d');
+            const inventoryData = <?= json_encode($inventoryChart ?? ['labels' => [], 'data' => [], 'colors' => []]) ?>;
+            new Chart(inventoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: inventoryData.labels,
+                    datasets: [{
+                        data: inventoryData.data,
+                        backgroundColor: inventoryData.colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: textColor } }
+                    },
+                    cutout: '75%'
+                }
+            });
+        }
     });
 </script>
-<?php
-//$content = ob_get_clean();
-//include __DIR__ . '/../layouts/app.php';

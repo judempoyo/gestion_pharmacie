@@ -19,8 +19,13 @@
     <div class="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2">
         <div class="p-4 border rounded dark:border-gray-600">
             <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Client</h3>
-            <p class="text-gray-700 dark:text-gray-300"><?= htmlspecialchars($invoice->customer->name) ?></p>
-            <p class="text-gray-700 dark:text-gray-300"><?= htmlspecialchars($invoice->customer->phone) ?></p>
+            <?php if ($invoice->customer): ?>
+                <p class="text-gray-700 dark:text-gray-300"><?= htmlspecialchars($invoice->customer->name) ?></p>
+                <p class="text-gray-700 dark:text-gray-300"><?= htmlspecialchars($invoice->customer->phone) ?></p>
+            <?php else: ?>
+                <p class="text-gray-700 dark:text-gray-300"><?= htmlspecialchars($invoice->guest_name ?? 'Client Passager') ?></p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">(Client non enregistré)</p>
+            <?php endif; ?>
         </div>
         <div class="p-4 border rounded dark:border-gray-600">
             <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Facture</h3>

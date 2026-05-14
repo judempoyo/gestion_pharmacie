@@ -1,65 +1,67 @@
-# Gestion Studio Photo
+# PharmaGest - Système de Gestion de Pharmacie
 
-Ce projet consiste à mettre en place une application de gestion pour un studio photo, développée en PHP et utilisant TailwindCSS pour le design.
+PharmaGest est une solution moderne et intuitive pour la gestion complète d'une pharmacie. Développée en PHP avec une architecture MVC, elle offre des outils puissants pour le suivi des stocks, des ventes et des rapports d'activité.
 
-## Fonctionnalités
+## 🚀 Fonctionnalités Clés
 
-- Gestion des réservations
-- Gestion des clients
-- Gestion des séances photo
-- Génération de factures
-- Tableau de bord avec statistiques détaillées 
+- **📦 Gestion des Médicaments** : Catalogue complet avec suivi précis des quantités et des prix.
+- **🕒 Suivi de Péremption** : Alertes automatiques pour les produits approchant de la date d'expiration.
+- **💰 Enregistrement des Ventes** : Système de facturation rapide avec historique des transactions.
+- **🤝 Gestion des Fournisseurs** : Suivi des commandes et réapprovisionnement simplifié.
+- **📊 Rapports & Statistiques** : Tableaux de bord dynamiques et rapports exportables (CSV) pour analyser les performances.
+- **🌗 Mode Sombre/Clair** : Interface utilisateur adaptative et moderne utilisant Tailwind CSS 4.
 
-## Prérequis
+## 📋 Prérequis
 
-- PHP 7.4 ou supérieur
+- PHP 8.1 ou supérieur
+- MySQL / MariaDB
 - Composer
-- Node.js et npm
+- Node.js & NPM (pour la compilation des styles)
 
-## Installation
+## 🛠️ Installation
 
-1. Clonez le repository (accès privé requis) :
-  ```bash
-  git clone https://github.com/votre-utilisateur/votre-repository.git
-  ```
-2. Accédez au répertoire du projet :
-  ```bash
-  cd votre-repository
-  ```
-3. Installez les dépendances PHP avec Composer :
-  ```bash
-  composer install
-  ```
-4. Installez les dépendances JavaScript avec npm :
-  ```bash
-  npm install
-  ```
-5. Compilez les assets avec TailwindCSS :
-  ```bash
-  npm run dev
-  ```
+1. **Clonage du projet** :
+   ```bash
+   git clone <repository-url>
+   cd gestion_pharmacie
+   ```
 
-## Configuration
+2. **Installation des dépendances PHP** :
+   ```bash
+   composer install
+   ```
 
-1. Copiez le fichier `.env.example` en `.env` :
-  ```bash
-  cp .env.example .env
-  ```
-2. Configurez les variables d'environnement dans le fichier `.env`.
+3. **Installation des dépendances Frontend** :
+   ```bash
+   npm install
+   ```
 
-## Utilisation
+4. **Configuration de l'environnement** :
+   - Copiez `.env.example` vers `.env`
+   - Configurez vos accès base de données dans `.env`
 
-- Démarrez le serveur de développement PHP :
-  ```bash
-  php -S localhost:8000 -t public
-  ```
-- Accédez à l'application via votre navigateur à l'adresse `http://localhost:8000`.
+5. **Initialisation de la base de données** :
+   - Importez le fichier `schema.sql` dans votre base de données MySQL.
 
-## Contribution
+## 💻 Développement
 
-Les contributions sont les bienvenues. Veuillez soumettre une pull request pour toute amélioration ou correction de bug.
+Pour compiler les styles en temps réel pendant le développement :
+```bash
+npm run dev
+```
 
-## Licence
+Pour générer les styles optimisés pour la production :
+```bash
+npm run build
+```
 
-Ce projet est sous licence privée. Tous droits réservés.
+## 🌐 Serveur Local
 
+Vous pouvez utiliser Apache ou le serveur intégré de PHP :
+```bash
+php -S localhost:8000 -t public
+```
+
+## 📄 Licence
+
+Ce projet est la propriété de **Jude Mpoyo**. Tous droits réservés.

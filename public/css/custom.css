@@ -1,37 +1,148 @@
-#wrapper.sidebar-mini #sidebar .sidebar-text {
-  display: none;
-}
-
-#wrapper:not(.sidebar-mini) #sidebar .sidebar-text {
-  display: block;
-}
-
-#wrapper.sidebar-mini .toggle-button .sidebar-mini-icon {
-  display: block;
-}
-
-#wrapper:not(.sidebar-mini) .toggle-button .sidebar-mini-icon {
-  display: none;
-}
-
-#wrapper.sidebar-mini .toggle-button .sidebar-icon {
-  display: none;
-}
-
-
-#wrapper:not(.sidebar-mini) .toggle-button .sidebar-icon {
-  display: block;
-}
-
-#sidebar {
-  transition: width 0.3s ease;
-}
-
-.toggle-button {
-  transition: background-color 0.2s ease;
-}
-
 .sidebar-text {
-  transition: opacity 0.3s ease;
+    animation: fadeIn 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
+/* Sidebar Mini Styles */
+@media (min-width: 768px) {
+    #sidebar.sidebar-mini {
+        width: 5rem !important; /* w-20 */
+    }
+
+    #sidebar.sidebar-mini .sidebar-text {
+        display: none !important;
+    }
+
+    #sidebar.sidebar-mini h1 span {
+        display: none !important;
+    }
+    
+    #sidebar.sidebar-mini a {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    #sidebar.sidebar-mini a svg {
+        margin-left: 0;
+    }
+}
+
+
+/* Fix Autofill background color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover, 
+.dark input:-webkit-autofill:focus, 
+.dark input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #1f2937 inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
+/* Custom Select Styles */
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+.dark select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+}
+
+/* JumpDataTable & Table Fixes for Dark Mode */
+.dark table {
+    border-color: #374151 !important;
+}
+
+.dark thead {
+    background-color: #1f2937 !important;
+}
+
+.dark th {
+    color: #9ca3af !important;
+    border-bottom-color: #374151 !important;
+}
+
+.dark td {
+    color: #e5e7eb !important;
+    border-bottom-color: #374151 !important;
+}
+
+/* Hover fix for JumpDataTable */
+tr:hover {
+    background-color: rgba(20, 184, 166, 0.05) !important;
+}
+
+.dark tr:hover {
+    background-color: rgba(20, 184, 166, 0.1) !important;
+}
+
+/* Pagination Fixes */
+.dark .pagination-link {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+    color: #e5e7eb !important;
+}
+
+.dark .pagination-link.active {
+    background-color: #14b8a6 !important;
+    color: white !important;
+}
+
+/* Expiry Alerts Colors */
+.expiry-safe {
+    color: #10b981; /* Green */
+}
+
+.expiry-warning {
+    color: #f59e0b; /* Amber - within 6 months */
+}
+
+.expiry-critical {
+    color: #ef4444; /* Red - within 3 months */
+}
+
+.expiry-expired {
+    color: #7f1d1d; /* Dark Red - Expired */
+    font-weight: bold;
+    text-decoration: line-through;
+}
+
+.dark .expiry-warning {
+    color: #fbbf24;
+}
+
+.dark .expiry-critical {
+    color: #f87171;
+}
+
+.dark .expiry-expired {
+    color: #fecaca;
+}
+
+/* Custom Animations */
+.animate-fade-in { animation: fadeIn 0.5s ease-out; }
+.animate-fade-in-down { animation: fadeInDown 0.5s ease-out; }
+.animate-fade-in-up { animation: fadeInUp 0.5s ease-out; }
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}

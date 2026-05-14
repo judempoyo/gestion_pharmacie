@@ -3,7 +3,9 @@ namespace App\Controllers;
 
 use App\Models\Product;
 use App\Core\ViewRenderer;
-
+use Jump\JumpDataTable\DataAction;
+use Jump\JumpDataTable\DataColumn;
+use Jump\JumpDataTable\DataTable;
 class ProductController
 {
     use ViewRenderer;
@@ -11,32 +13,93 @@ class ProductController
 
     public function __construct()
     {
-        $this->basePath = '/Projets/gestion_pharmacie/public';
+        $this->basePath = BASE_URL_PATH;
     }
 
     public function index()
     {
-        $perPage = 10; 
-        $sort = $_GET['sort'] ?? 'id'; 
-        $direction = $_GET['direction'] ?? 'asc'; 
-    
-        $allowedSorts = ['id', 'designation', 'unit_price']; 
+        $perPage = 10;
+        $currentPage = $_GET['page'] ?? 1;
+        $sort = $_GET['sort'] ?? 'id';
+        $direction = $_GET['direction'] ?? 'asc';
+        $search = $_GET['search'] ?? '';
+
+        $allowedSorts = ['id', 'designation', 'quantity', 'unit_price', 'expiry_date'];
         $allowedDirections = ['asc', 'desc'];
-    
-        if (!in_array($sort, $allowedSorts)) {
+
+        if (!in_array($sort, $allowedSorts))
             $sort = 'id';
-        }
-        if (!in_array($direction, $allowedDirections)) {
+        if (!in_array($direction, $allowedDirections))
             $direction = 'asc';
+
+        $query = Product::query();
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('designation', 'LIKE', "%{$search}%")
+                    ->orWhere('quantity', 'LIKE', "%{$search}%")
+                    ->orWhere('unit_price', 'LIKE', "%{$search}%");
+            });
         }
-    
-        $products = Product::orderBy($sort, $direction)->paginate($perPage);
-    
+
+        $totalItems = $query->count();
+        $offset = ($currentPage - 1) * $perPage;
+        $products = $query->orderBy($sort, $direction)
+            ->offset($offset)
+            ->limit($perPage)
+            ->get()
+            ->toArray();
+
+        $table = DataTable::make()
+            ->title('Liste des Produits')
+            ->modelName('product')
+            ->createUrl($this->basePath . '/product/create')
+            ->publicUrl($this->basePath)
+            ->addColumn((new DataColumn('id', 'ID'))->sortable())
+            ->addColumn((new DataColumn('designation', 'Désignation'))->searchable())
+            ->addColumn((new DataColumn('quantity', 'Quantité'))->sortable())
+            ->addColumn((new DataColumn('unit_price', 'Prix Unitaire'))->sortable())
+            ->addColumn((new DataColumn('created_at', 'Ajouté le'))
+                ->sortable()
+                ->withRenderer(fn($item) => date('d/m/Y', strtotime($item['created_at']))))
+            ->addColumn((new DataColumn('expiry_date', 'Péremption'))
+                ->sortable()
+                ->withRenderer(function ($item) {
+                    $value = $item['expiry_date'] ?? null;
+                    if (!$value) return '-';
+                    $date = \Carbon\Carbon::parse($value);
+                    $now = \Carbon\Carbon::now();
+                    
+                    $class = 'expiry-safe';
+                    $label = $date->format('d/m/Y');
+                    
+                    if ($date->isPast()) {
+                        $class = 'expiry-expired opacity-50 italic line-through';
+                        $label = '🚫 Périmé (' . $label . ')';
+                    } elseif ($date->diffInMonths($now) <= 3) {
+                        $class = 'expiry-critical';
+                    } elseif ($date->diffInMonths($now) <= 6) {
+                        $class = 'expiry-warning';
+                    }
+                    
+                    return "<span class='$class'>$label</span>";
+                }))
+            ->addAction(DataAction::edit('Modifier', fn($item) => $this->basePath . '/product/' . 'edit/' . $item['id']))
+            ->addAction(DataAction::delete('Supprimer', fn($item) => $this->basePath . '/product/' . 'delete/' . $item['id']))
+            ->data($products)
+            ->enableRowSelection(true)
+            ->setBulkActions([
+                DataAction::delete('Supprimer', fn($item) => "/delete/{$item}"),
+            ])
+            ->paginate($totalItems, $perPage, $currentPage, $this->basePath . '/product', [
+                'sort' => $sort,
+                'direction' => $direction,
+                'search' => $search
+            ]);
+
         $this->render('app', 'products/index', [
-            'products' => $products,
-            'title' => 'Liste des Produits',
-            'sort' => $sort,
-            'direction' => $direction,
+            'datatable' => $table->render(),
+            'title' => 'Liste des Produits'
         ]);
     }
 
@@ -52,32 +115,16 @@ class ProductController
         $data = [
             'designation' => trim($_POST['designation']),
             'quantity' => trim($_POST['quantity']),
-            'unit_price' => trim($_POST['unit_price'])
+            'unit_price' => trim($_POST['unit_price']),
+            'expiry_date' => !empty($_POST['expiry_date']) ? $_POST['expiry_date'] : null,
         ];
 
         // Validation
         if (empty($data['designation'])) {
-            http_response_code(400);
-            echo "La désignation est obligatoire";
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'La désignation est obligatoire'];
+            header('Location: ' . $this->basePath . '/product/create');
             return;
         }
-        if (empty($data['unit_price'])) {
-            http_response_code(400);
-            echo "Le prix unitaire est obligatoire";
-            return;
-        }
-
-        // Handle image upload
-       /*  if (!empty($_FILES['image']['name'])) {
-            $uploadResult = $this->handleImageUpload();
-            if ($uploadResult['success']) {
-                $data['image_url'] = $uploadResult['path'];
-            } else {
-                http_response_code(400);
-                echo $uploadResult['error'];
-                return;
-            }
-        } */
 
         Product::create($data);
 
@@ -116,35 +163,15 @@ class ProductController
         $data = [
             'designation' => trim($_POST['designation']),
             'quantity' => trim($_POST['quantity']),
-            'unit_price' => trim($_POST['unit_price'])
+            'unit_price' => trim($_POST['unit_price']),
+            'expiry_date' => !empty($_POST['expiry_date']) ? $_POST['expiry_date'] : null,
         ];
 
         if (empty($data['designation'])) {
-            http_response_code(400);
-            echo "La désignation est obligatoire";
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'La désignation est obligatoire'];
+            header('Location: ' . $this->basePath . '/product/edit/' . $id);
             return;
         }
-        if (empty($data['unit_price'])) {
-            http_response_code(400);
-            echo "Le prix unitaire est obligatoire";
-            return;
-        }
-
-        /* // Handle image upload if new image is provided
-        if (!empty($_FILES['image']['name'])) {
-            $uploadResult = $this->handleImageUpload();
-            if ($uploadResult['success']) {
-                // Delete old image if exists
-                if ($product->image_url && file_exists($product->image_url)) {
-                    unlink($product->image_url);
-                }
-                $data['image_url'] = $uploadResult['path'];
-            } else {
-                http_response_code(400);
-                echo $uploadResult['error'];
-                return;
-            }
-        } */
 
         $product->update($data);
         $_SESSION['flash'] = [
@@ -157,16 +184,11 @@ class ProductController
     public function delete($id)
     {
         $product = Product::where('id', $id)->first();
-        
+
         if (!$product) {
             http_response_code(404);
             echo "Produit non trouvé";
             return;
-        }
-
-        // Delete associated image if exists
-        if ($product->image_url && file_exists($product->image_url)) {
-            unlink($product->image_url);
         }
 
         $product->delete();
@@ -196,9 +218,9 @@ class ProductController
         // Écrire les données des produits
         foreach ($products as $product) {
             fputcsv($output, [
-                $product->id, 
-                $product->designation, 
-                $product->quantity, 
+                $product->id,
+                $product->designation,
+                $product->quantity,
                 $product->unit_price
             ]);
         }
@@ -215,34 +237,34 @@ class ProductController
     /* protected function handleImageUpload()
     {
         $targetDir = $_SERVER['DOCUMENT_ROOT'] . $this->basePath . "/uploads/products/";
-        
+
         if (!file_exists($targetDir)) {
             if (!mkdir($targetDir, 0775, true)) {
                 return ['success' => false, 'error' => 'Impossible de créer le répertoire de téléchargement.'];
             }
         }
-    
+
         $imageFileType = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
         $fileName = uniqid() . '.' . $imageFileType;
         $targetFile = $targetDir . $fileName;
-    
+
         // Check if image file is a actual image or fake image
         $check = getimagesize($_FILES["image"]["tmp_name"]);
         if ($check === false) {
             return ['success' => false, 'error' => 'Le fichier n\'est pas une image.'];
         }
-    
+
         // Check file size (max 2MB)
         if ($_FILES["image"]["size"] > 2000000) {
             return ['success' => false, 'error' => 'L\'image est trop volumineuse (max 2MB).'];
         }
-    
+
         // Allow certain file formats
         $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
         if (!in_array($imageFileType, $allowedTypes)) {
             return ['success' => false, 'error' => 'Seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.'];
         }
-    
+
         // Try to upload file
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
             // Return relative path for database storage
