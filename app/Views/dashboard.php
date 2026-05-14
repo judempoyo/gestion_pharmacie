@@ -19,7 +19,7 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Produits en stock</p>
-                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= $totalProducts ?></p>
+                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= $totalProducts ?? 0 ?></p>
                     </div>
                 </div>
             </div>
@@ -34,8 +34,8 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Stock faible / Rupture</p>
-                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= $criticalStock + $outOfStock ?></p>
-                        <p class="text-xs text-amber-600 dark:text-amber-400"><?= $outOfStock ?> en rupture totale</p>
+                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= ($criticalStock ?? 0) + ($outOfStock ?? 0) ?></p>
+                        <p class="text-xs text-amber-600 dark:text-amber-400"><?= $outOfStock ?? 0 ?> en rupture totale</p>
                     </div>
                 </div>
             </div>
@@ -50,8 +50,8 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Péremption</p>
-                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= $expiredProducts ?></p>
-                        <p class="text-xs text-red-600 dark:text-red-400"><?= $nearExpiry ?> expirent bientôt</p>
+                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= $expiredProducts ?? 0 ?></p>
+                        <p class="text-xs text-red-600 dark:text-red-400"><?= $nearExpiry ?? 0 ?> expirent bientôt</p>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,7 @@
                     </div>
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-300">Ventes du mois</p>
-                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= number_format($monthlySales, 0, ',', ' ') ?> FC</p>
+                        <p class="text-2xl font-semibold text-gray-900 dark:text-white"><?= number_format($monthlySales ?? 0, 0, ',', ' ') ?> FC</p>
                     </div>
                 </div>
             </div>
@@ -75,20 +75,24 @@
         <!-- Graphiques -->
         <div class="grid grid-cols-1 gap-8 mb-8 lg:grid-cols-2">
             <!-- Graphique des ventes/achats -->
-            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg animate-fade-in-left">
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg animate-fade-in">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">Ventes et achats</h2>
                     <span class="text-sm text-gray-500 dark:text-gray-400">6 derniers mois</span>
                 </div>
-                <canvas id="salesChart" height="300"></canvas>
+                <div class="relative h-64">
+                    <canvas id="salesChart"></canvas>
+                </div>
             </div>
 
             <!-- État du stock -->
-            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg animate-fade-in-right">
+            <div class="p-6 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg animate-fade-in">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">État du stock</h2>
                 </div>
-                <canvas id="inventoryChart" height="300"></canvas>
+                <div class="relative h-64">
+                    <canvas id="inventoryChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -102,17 +106,17 @@
                     </svg>
                     Stock faible
                 </h2>
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto max-h-60">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                            <?php foreach ($lowStockProducts as $product): ?>
+                            <?php foreach ($lowStockProducts ?? [] as $product): ?>
                             <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700">
                                 <td class="px-2 py-3 text-sm font-medium text-gray-900 dark:text-white"><?= htmlspecialchars($product->designation) ?></td>
-                                <td class="px-2 py-3 text-sm text-right <?= $product->quantity == 0 ? 'text-red-600 font-semibold' : 'text-amber-600' ?>">
-                                    <?= $product->quantity ?>
+                                <td class="px-2 py-3 text-sm text-right <?= ($product->quantity ?? 0) == 0 ? 'text-red-600 font-semibold' : 'text-amber-600' ?>">
+                                    <?= $product->quantity ?? 0 ?>
                                 </td>
                                 <td class="px-2 py-3 text-sm text-right">
-                                    <a href="<?= url('/purchase/create?product_id=' . $product->id) ?>" class="text-blue-600 hover:underline">Commander</a>
+                                    <a href="<?= url('/purchase/create?product_id=' . ($product->id ?? '')) ?>" class="text-blue-600 hover:underline">Commander</a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -129,14 +133,14 @@
                     </svg>
                     Péremption proche
                 </h2>
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto max-h-60">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                            <?php foreach ($expiringProducts as $product): ?>
+                            <?php foreach ($expiringProducts ?? [] as $product): ?>
                             <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700">
                                 <td class="px-2 py-3 text-sm font-medium text-gray-900 dark:text-white"><?= htmlspecialchars($product->designation) ?></td>
-                                <td class="px-2 py-3 text-sm text-right <?= strtotime($product->expiry_date) < time() ? 'text-red-600 font-bold' : 'text-orange-500' ?>">
-                                    <?= date('d/m/Y', strtotime($product->expiry_date)) ?>
+                                <td class="px-2 py-3 text-sm text-right <?= (isset($product->expiry_date) && strtotime($product->expiry_date) < time()) ? 'text-red-600 font-bold' : 'text-orange-500' ?>">
+                                    <?= isset($product->expiry_date) ? date('d/m/Y', strtotime($product->expiry_date)) : '-' ?>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -153,37 +157,21 @@
                     </svg>
                     Ventes récentes
                 </h2>
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto max-h-60">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                            <?php foreach ($recentInvoices as $invoice): ?>
+                            <?php foreach ($recentInvoices ?? [] as $invoice): ?>
                             <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700">
                                 <td class="px-2 py-3 text-sm font-medium text-blue-600 dark:text-blue-400">
-                                    <a href="<?= url('/invoice/show/' . $invoice->id) ?>" class="hover:underline">#<?= $invoice->id ?></a>
+                                    <a href="<?= url('/invoice/show/' . ($invoice->id ?? '')) ?>" class="hover:underline">#<?= $invoice->id ?? '' ?></a>
                                 </td>
-                                <td class="px-2 py-3 text-sm text-gray-900 dark:text-white"><?= htmlspecialchars($invoice->customer->name) ?></td>
-                                <td class="px-2 py-3 text-sm text-right font-medium"><?= number_format($invoice->total_amount, 0, ',', ' ') ?></td>
+                                <td class="px-2 py-3 text-sm text-gray-900 dark:text-white"><?= htmlspecialchars($invoice->customer->name ?? 'Client inconnu') ?></td>
+                                <td class="px-2 py-3 text-sm text-right font-medium"><?= number_format($invoice->total_amount ?? 0, 0, ',', ' ') ?></td>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-
-        <!-- Meilleurs produits -->
-        <div class="p-6 mb-8 transition-all bg-white rounded-lg shadow dark:bg-gray-800 hover:shadow-lg">
-            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Produits les plus vendus</h2>
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-                <?php foreach ($topProducts as $product): ?>
-                <div class="p-4 transition-all bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-100 dark:border-gray-600">
-                    <div class="text-sm font-semibold text-gray-900 dark:text-white truncate"><?= htmlspecialchars($product->designation) ?></div>
-                    <div class="flex items-center justify-between mt-2">
-                        <span class="text-xs text-gray-500 dark:text-gray-400"><?= $product->sales_count ?? 0 ?> vendus</span>
-                        <span class="text-xs font-bold text-teal-600 dark:text-teal-400"><?= number_format($product->unit_price, 0, ',', ' ') ?> FC</span>
-                    </div>
-                </div>
-                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -192,57 +180,59 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        if (typeof Chart === 'undefined') return;
+
         const isDark = document.documentElement.classList.contains('dark');
         const textColor = isDark ? '#e5e7eb' : '#374151';
         const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
 
-        const salesCtx = document.getElementById('salesChart').getContext('2d');
-        new Chart(salesCtx, {
-            type: 'line',
-            data: {
-                labels: <?= json_encode($salesChart['labels']) ?>,
-                datasets: <?= json_encode($salesChart['datasets']) ?>
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                tension: 0.4,
-                plugins: {
-                    legend: { labels: { color: textColor } }
-                },
-                scales: {
-                    y: { grid: { color: gridColor }, ticks: { color: textColor } },
-                    x: { grid: { color: gridColor }, ticks: { color: textColor } }
+        // Chart 1: Sales
+        const salesEl = document.getElementById('salesChart');
+        if (salesEl) {
+            const salesCtx = salesEl.getContext('2d');
+            const salesData = <?= json_encode($salesChart ?? ['labels' => [], 'datasets' => []]) ?>;
+            new Chart(salesCtx, {
+                type: 'line',
+                data: salesData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    tension: 0.3,
+                    plugins: {
+                        legend: { labels: { color: textColor } }
+                    },
+                    scales: {
+                        y: { grid: { color: gridColor }, ticks: { color: textColor } },
+                        x: { grid: { color: gridColor }, ticks: { color: textColor } }
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-        new Chart(inventoryCtx, {
-            type: 'doughnut',
-            data: {
-                labels: <?= json_encode($inventoryChart['labels']) ?>,
-                datasets: [{
-                    data: <?= json_encode($inventoryChart['data']) ?>,
-                    backgroundColor: <?= json_encode($inventoryChart['colors']) ?>,
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'right', labels: { color: textColor } }
+        // Chart 2: Inventory
+        const invEl = document.getElementById('inventoryChart');
+        if (invEl) {
+            const inventoryCtx = invEl.getContext('2d');
+            const inventoryData = <?= json_encode($inventoryChart ?? ['labels' => [], 'data' => [], 'colors' => []]) ?>;
+            new Chart(inventoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: inventoryData.labels,
+                    datasets: [{
+                        data: inventoryData.data,
+                        backgroundColor: inventoryData.colors,
+                        borderWidth: 0
+                    }]
                 },
-                cutout: '75%'
-            }
-        });
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: textColor } }
+                    },
+                    cutout: '75%'
+                }
+            });
+        }
     });
 </script>
-
-<style>
-    .animate-fade-in-down { animation: fadeInDown 0.5s ease-out; }
-    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-</style>

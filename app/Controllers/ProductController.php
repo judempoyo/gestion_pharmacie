@@ -17,67 +17,67 @@ class ProductController
     }
 
     public function index()
-{
-    $perPage = 10;
-    $currentPage = $_GET['page'] ?? 1;
-    $sort = $_GET['sort'] ?? 'id';
-    $direction = $_GET['direction'] ?? 'asc';
-    $search = $_GET['search'] ?? '';
+    {
+        $perPage = 10;
+        $currentPage = $_GET['page'] ?? 1;
+        $sort = $_GET['sort'] ?? 'id';
+        $direction = $_GET['direction'] ?? 'asc';
+        $search = $_GET['search'] ?? '';
 
-    $allowedSorts = ['id', 'designation', 'quantity', 'unit_price', 'expiry_date'];
-    $allowedDirections = ['asc', 'desc'];
+        $allowedSorts = ['id', 'designation', 'quantity', 'unit_price', 'expiry_date'];
+        $allowedDirections = ['asc', 'desc'];
 
-    if (!in_array($sort, $allowedSorts))
-        $sort = 'id';
-    if (!in_array($direction, $allowedDirections))
-        $direction = 'asc';
+        if (!in_array($sort, $allowedSorts))
+            $sort = 'id';
+        if (!in_array($direction, $allowedDirections))
+            $direction = 'asc';
 
-    $query = Product::query();
+        $query = Product::query();
 
-    if (!empty($search)) {
-        $query->where(function ($q) use ($search) {
-            $q->where('designation', 'LIKE', "%{$search}%")
-                ->orWhere('quantity', 'LIKE', "%{$search}%")
-                ->orWhere('unit_price', 'LIKE', "%{$search}%");
-        });
-    }
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('designation', 'LIKE', "%{$search}%")
+                    ->orWhere('quantity', 'LIKE', "%{$search}%")
+                    ->orWhere('unit_price', 'LIKE', "%{$search}%");
+            });
+        }
 
-    $totalItems = $query->count();
-    $offset = ($currentPage - 1) * $perPage;
-    $products = $query->orderBy($sort, $direction)
-        ->offset($offset)
-        ->limit($perPage)
-        ->get()
-        ->toArray();
+        $totalItems = $query->count();
+        $offset = ($currentPage - 1) * $perPage;
+        $products = $query->orderBy($sort, $direction)
+            ->offset($offset)
+            ->limit($perPage)
+            ->get()
+            ->toArray();
 
-    $table = DataTable::make()
-        ->title('Liste des Produits')
-        ->modelName('product')
-        ->createUrl($this->basePath . '/product/create')
-        ->publicUrl($this->basePath)
-        ->addColumn((new DataColumn('id', 'ID'))->sortable())
-        ->addColumn((new DataColumn('designation', 'Désignation'))->searchable())
-        ->addColumn((new DataColumn('quantity', 'Quantité'))->sortable())
-        ->addColumn((new DataColumn('unit_price', 'Prix Unitaire'))->sortable())
-        ->addColumn((new DataColumn('expiry_date', 'Péremption'))->sortable())
-        ->addAction(DataAction::edit('Modifier', fn($item) => $this->basePath . '/product/' . 'edit/' . $item['id']))
-        ->addAction(DataAction::delete('Supprimer', fn($item) => $this->basePath . '/product/' . 'delete/' . $item['id']))
-        ->data($products)
-        ->enableRowSelection(true)
-        ->setBulkActions([
-            DataAction::delete('Supprimer', fn($item) => "/delete/{$item}"),
-        ])
-        ->paginate($totalItems, $perPage, $currentPage, $this->basePath . '/product', [
-            'sort' => $sort,
-            'direction' => $direction,
-            'search' => $search
+        $table = DataTable::make()
+            ->title('Liste des Produits')
+            ->modelName('product')
+            ->createUrl($this->basePath . '/product/create')
+            ->publicUrl($this->basePath)
+            ->addColumn((new DataColumn('id', 'ID'))->sortable())
+            ->addColumn((new DataColumn('designation', 'Désignation'))->searchable())
+            ->addColumn((new DataColumn('quantity', 'Quantité'))->sortable())
+            ->addColumn((new DataColumn('unit_price', 'Prix Unitaire'))->sortable())
+            ->addColumn((new DataColumn('expiry_date', 'Péremption'))->sortable())
+            ->addAction(DataAction::edit('Modifier', fn($item) => $this->basePath . '/product/' . 'edit/' . $item['id']))
+            ->addAction(DataAction::delete('Supprimer', fn($item) => $this->basePath . '/product/' . 'delete/' . $item['id']))
+            ->data($products)
+            ->enableRowSelection(true)
+            ->setBulkActions([
+                DataAction::delete('Supprimer', fn($item) => "/delete/{$item}"),
+            ])
+            ->paginate($totalItems, $perPage, $currentPage, $this->basePath . '/product', [
+                'sort' => $sort,
+                'direction' => $direction,
+                'search' => $search
+            ]);
+
+        $this->render('app', 'products/index', [
+            'datatable' => $table->render(),
+            'title' => 'Liste des Produits'
         ]);
-
-    $this->render('app', 'products/index', [
-        'datatable' => $table->render(),
-        'title' => 'Liste des Produits'
-    ]);
-}
+    }
 
     public function create()
     {
@@ -160,7 +160,7 @@ class ProductController
     public function delete($id)
     {
         $product = Product::where('id', $id)->first();
-        
+
         if (!$product) {
             http_response_code(404);
             echo "Produit non trouvé";
@@ -173,7 +173,6 @@ class ProductController
             'message' => 'Produit supprimé avec succès'
         ];
         header('Location: ' . $this->basePath . '/product');
-    }oduct');
     }
 
     public function export()
@@ -195,9 +194,9 @@ class ProductController
         // Écrire les données des produits
         foreach ($products as $product) {
             fputcsv($output, [
-                $product->id, 
-                $product->designation, 
-                $product->quantity, 
+                $product->id,
+                $product->designation,
+                $product->quantity,
                 $product->unit_price
             ]);
         }
@@ -214,34 +213,34 @@ class ProductController
     /* protected function handleImageUpload()
     {
         $targetDir = $_SERVER['DOCUMENT_ROOT'] . $this->basePath . "/uploads/products/";
-        
+
         if (!file_exists($targetDir)) {
             if (!mkdir($targetDir, 0775, true)) {
                 return ['success' => false, 'error' => 'Impossible de créer le répertoire de téléchargement.'];
             }
         }
-    
+
         $imageFileType = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
         $fileName = uniqid() . '.' . $imageFileType;
         $targetFile = $targetDir . $fileName;
-    
+
         // Check if image file is a actual image or fake image
         $check = getimagesize($_FILES["image"]["tmp_name"]);
         if ($check === false) {
             return ['success' => false, 'error' => 'Le fichier n\'est pas une image.'];
         }
-    
+
         // Check file size (max 2MB)
         if ($_FILES["image"]["size"] > 2000000) {
             return ['success' => false, 'error' => 'L\'image est trop volumineuse (max 2MB).'];
         }
-    
+
         // Allow certain file formats
         $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
         if (!in_array($imageFileType, $allowedTypes)) {
             return ['success' => false, 'error' => 'Seuls les fichiers JPG, JPEG, PNG et GIF sont autorisés.'];
         }
-    
+
         // Try to upload file
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
             // Return relative path for database storage
