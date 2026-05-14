@@ -111,7 +111,7 @@ class PurchaseController
         $products = Product::all();
 
         $this->render('app', 'purchases/create', [
-            'title' => 'Créer une facture',
+            'title' => 'Enregistrer un achat',
             'suppliers' => $suppliers,
             'products' => $products
         ]);

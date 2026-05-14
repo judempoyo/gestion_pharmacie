@@ -31,8 +31,13 @@
             <!-- Informations du client -->
             <div class="mb-6">
                 <h3 class="text-lg font-semibold text-gray-800">Client</h3>
-                <p class="text-sm text-gray-600"><?= htmlspecialchars($invoice->customer->name) ?></p>
-                <p class="text-sm text-gray-600"><?= htmlspecialchars($invoice->customer->phone) ?></p>
+                <?php if ($invoice->customer): ?>
+                    <p class="text-sm text-gray-600"><?= htmlspecialchars($invoice->customer->name) ?></p>
+                    <p class="text-sm text-gray-600"><?= htmlspecialchars($invoice->customer->phone) ?></p>
+                <?php else: ?>
+                    <p class="text-sm text-gray-600"><?= htmlspecialchars($invoice->guest_name ?? 'Client Passager') ?></p>
+                    <p class="text-xs text-gray-400 italic">(Client passager)</p>
+                <?php endif; ?>
             </div>
 
             <!-- Tableau des produits -->

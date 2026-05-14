@@ -57,9 +57,10 @@ class InvoiceController
 
     // Format data for DataTable
     $formattedData = array_map(function($invoice) {
+        $customerName = $invoice['customer']['name'] ?? $invoice['guest_name'] ?? 'Client Passager';
         return [
             'id' => $invoice['id'],
-            'customer_name' => $invoice['customer']['name'] ?? 'N/A',
+            'customer_name' => $customerName,
             'total_amount' => $invoice['total_amount'],
             'created_at' => $invoice['created_at']
         ];
@@ -109,10 +110,14 @@ class InvoiceController
     public function create()
     {
         $customers = Customer::all();
-        $products = Product::all();
+        // Uniquement les produits non périmés
+        $products = Product::where(function($q) {
+            $q->whereNull('expiry_date')
+              ->orWhere('expiry_date', '>=', date('Y-m-d'));
+        })->where('quantity', '>', 0)->get();
 
         $this->render('app', 'invoices/create', [
-            'title' => 'Créer une facture',
+            'title' => 'Enregistrer une vente',
             'customers' => $customers,
             'products' => $products
         ]);
@@ -121,14 +126,14 @@ class InvoiceController
     public function store()
     {
         // Validation de base
-        if (empty($_POST['customer_id'])) {
-            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Le client est obligatoire'];
+        if (empty($_POST['customer_id']) && empty($_POST['guest_name'])) {
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Veuillez sélectionner un client ou saisir un nom de client passager'];
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             return;
         }
 
         if (empty($_POST['products'])) {
-            $_SESSION['flash'] = ['type' => 'error', 'message' => 'La facture doit contenir au moins un produit'];
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'La vente doit contenir au moins un produit'];
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             return;
         }
@@ -138,11 +143,11 @@ class InvoiceController
             $product = Product::find($productData['id']);
             if (!$product) continue;
 
-            // 1. Vérifier l'expiration
+            // 1. Vérifier l'expiration (sécurité supplémentaire)
             if ($product->expiry_date && strtotime($product->expiry_date) < time()) {
                 $_SESSION['flash'] = [
                     'type' => 'error',
-                    'message' => "Vente impossible : le produit '{$product->designation}' est périmé depuis le " . date('d/m/Y', strtotime($product->expiry_date))
+                    'message' => "Vente impossible : le produit '{$product->designation}' est périmé"
                 ];
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
                 return;
@@ -152,16 +157,17 @@ class InvoiceController
             if ($product->quantity < $productData['quantity']) {
                 $_SESSION['flash'] = [
                     'type' => 'error',
-                    'message' => "Stock insuffisant pour '{$product->designation}' (Restant: {$product->quantity})"
+                    'message' => "Stock insuffisant pour '{$product->designation}'"
                 ];
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
                 return;
             }
         }
 
-        // Création de la facture si tout est OK
+        // Création de la facture
         $invoice = Invoice::create([
-            'customer_id' => $_POST['customer_id'],
+            'customer_id' => !empty($_POST['customer_id']) ? $_POST['customer_id'] : null,
+            'guest_name' => !empty($_POST['guest_name']) ? $_POST['guest_name'] : null,
             'total_amount' => 0
         ]);
 

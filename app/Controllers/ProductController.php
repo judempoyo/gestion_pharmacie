@@ -71,15 +71,18 @@ class ProductController
                     $now = \Carbon\Carbon::now();
                     
                     $class = 'expiry-safe';
+                    $label = $date->format('d/m/Y');
+                    
                     if ($date->isPast()) {
-                        $class = 'expiry-expired';
+                        $class = 'expiry-expired opacity-50 italic line-through';
+                        $label = '🚫 Périmé (' . $label . ')';
                     } elseif ($date->diffInMonths($now) <= 3) {
                         $class = 'expiry-critical';
                     } elseif ($date->diffInMonths($now) <= 6) {
                         $class = 'expiry-warning';
                     }
                     
-                    return "<span class='$class'>" . $date->format('d/m/Y') . "</span>";
+                    return "<span class='$class'>$label</span>";
                 }))
             ->addAction(DataAction::edit('Modifier', fn($item) => $this->basePath . '/product/' . 'edit/' . $item['id']))
             ->addAction(DataAction::delete('Supprimer', fn($item) => $this->basePath . '/product/' . 'delete/' . $item['id']))
