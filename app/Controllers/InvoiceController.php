@@ -73,7 +73,9 @@ class InvoiceController
         ->addColumn((new DataColumn('id', 'ID'))->sortable())
         ->addColumn((new DataColumn('customer_name', 'Client'))->searchable())
         ->addColumn((new DataColumn('total_amount', 'Montant Total'))->sortable())
-        ->addColumn((new DataColumn('created_at', 'Date')))
+        ->addColumn((new DataColumn('created_at', 'Date'))
+            ->sortable()
+            ->withRenderer(fn($item) => date('d/m/Y H:i', strtotime($item['created_at']))))
           ->addAction(DataAction::view('Détails', fn($item) => $this->basePath . '/invoice/' . 'show/' . $item['id']))
           ->addAction(DataAction::fromArray([
     'type' => 'print',

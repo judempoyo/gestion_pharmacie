@@ -59,7 +59,28 @@ class ProductController
             ->addColumn((new DataColumn('designation', 'Désignation'))->searchable())
             ->addColumn((new DataColumn('quantity', 'Quantité'))->sortable())
             ->addColumn((new DataColumn('unit_price', 'Prix Unitaire'))->sortable())
-            ->addColumn((new DataColumn('expiry_date', 'Péremption'))->sortable())
+            ->addColumn((new DataColumn('created_at', 'Ajouté le'))
+                ->sortable()
+                ->withRenderer(fn($item) => date('d/m/Y', strtotime($item['created_at']))))
+            ->addColumn((new DataColumn('expiry_date', 'Péremption'))
+                ->sortable()
+                ->withRenderer(function ($item) {
+                    $value = $item['expiry_date'] ?? null;
+                    if (!$value) return '-';
+                    $date = \Carbon\Carbon::parse($value);
+                    $now = \Carbon\Carbon::now();
+                    
+                    $class = 'expiry-safe';
+                    if ($date->isPast()) {
+                        $class = 'expiry-expired';
+                    } elseif ($date->diffInMonths($now) <= 3) {
+                        $class = 'expiry-critical';
+                    } elseif ($date->diffInMonths($now) <= 6) {
+                        $class = 'expiry-warning';
+                    }
+                    
+                    return "<span class='$class'>" . $date->format('d/m/Y') . "</span>";
+                }))
             ->addAction(DataAction::edit('Modifier', fn($item) => $this->basePath . '/product/' . 'edit/' . $item['id']))
             ->addAction(DataAction::delete('Supprimer', fn($item) => $this->basePath . '/product/' . 'delete/' . $item['id']))
             ->data($products)

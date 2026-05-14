@@ -881,12 +881,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/judempoyo/JumpDataTable.git",
-                "reference": "4918aaa67edfde2867ac6f293a4216df00bc350d"
+                "reference": "1afac89e92f74c67c2964493c16c6878fcabab6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/judempoyo/JumpDataTable/zipball/4918aaa67edfde2867ac6f293a4216df00bc350d",
-                "reference": "4918aaa67edfde2867ac6f293a4216df00bc350d",
+                "url": "https://api.github.com/repos/judempoyo/JumpDataTable/zipball/1afac89e92f74c67c2964493c16c6878fcabab6a",
+                "reference": "1afac89e92f74c67c2964493c16c6878fcabab6a",
                 "shasum": ""
             },
             "require": {
@@ -923,7 +923,8 @@
             "authors": [
                 {
                     "name": "Jude mpoyo",
-                    "email": "mpoyojude0@gmail.com"
+                    "email": "mpoyojude0@gmail.com",
+                    "homepage": "https://judempoyo.vercel.app"
                 }
             ],
             "description": "JUmp DataTable is a lightweight and flexible library for creating dynamic data tables in PHP applications. It provides an easy way to manage, render, and manipulate tabular data with features such as sorting, filtering, and pagination.",
@@ -931,7 +932,7 @@
                 "issues": "https://github.com/judempoyo/JumpDataTable/issues",
                 "source": "https://github.com/judempoyo/JumpDataTable/tree/main"
             },
-            "time": "2025-06-02T09:27:00+00:00"
+            "time": "2025-08-16T11:15:46+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -2825,5 +2826,5 @@
     "prefer-lowest": false,
     "platform": {},
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

@@ -28,8 +28,32 @@ class ReportController
             'total_value' => Product::selectRaw('SUM(quantity * unit_price) as total')->value('total'),
             'total_items' => Product::sum('quantity'),
             'out_of_stock' => Product::where('quantity', '<=', 0)->count(),
-            'expired' => Product::where('expiry_date', '<', Carbon::now()->toDateString())->count(),
+            'expired' => Product::whereNotNull('expiry_date')->where('expiry_date', '<', Carbon::now()->toDateString())->count(),
+            'expiring_soon' => Product::whereNotNull('expiry_date')->whereBetween('expiry_date', [
+                Carbon::now()->toDateString(),
+                Carbon::now()->addMonths(3)->toDateString()
+            ])->count(),
         ];
+
+        $topProducts = Product::query()
+            ->select('products.id', 'products.designation', 'products.unit_price')
+            ->selectSub(function($query) use ($startDate, $endDate) {
+                $query->from('invoice_lines')
+                    ->join('invoices', 'invoice_lines.invoice_id', '=', 'invoices.id')
+                    ->whereColumn('invoice_lines.product_id', 'products.id')
+                    ->whereBetween('invoices.created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
+                    ->selectRaw('SUM(invoice_lines.quantity)');
+            }, 'total_sold')
+            ->selectSub(function($query) use ($startDate, $endDate) {
+                $query->from('invoice_lines')
+                    ->join('invoices', 'invoice_lines.invoice_id', '=', 'invoices.id')
+                    ->whereColumn('invoice_lines.product_id', 'products.id')
+                    ->whereBetween('invoices.created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
+                    ->selectRaw('SUM(invoice_lines.quantity * invoice_lines.unit_price)');
+            }, 'total_revenue')
+            ->orderBy('total_revenue', 'desc')
+            ->limit(10)
+            ->get();
 
         $dailySales = Invoice::whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59'])
             ->selectRaw('DATE(created_at) as date, SUM(total_amount) as total')
@@ -38,13 +62,14 @@ class ReportController
             ->get();
 
         $this->render('app', 'reports/index', [
-            'title' => 'Rapports d\'activité',
+            'title' => 'Rapports détaillés',
             'startDate' => $startDate,
             'endDate' => $endDate,
             'salesSummary' => $salesSummary,
             'purchasesSummary' => $purchasesSummary,
             'stockSummary' => $stockSummary,
-            'dailySales' => $dailySales
+            'dailySales' => $dailySales,
+            'topProducts' => $topProducts
         ]);
     }
 

@@ -139,8 +139,24 @@
                             <?php foreach ($expiringProducts ?? [] as $product): ?>
                             <tr class="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700">
                                 <td class="px-2 py-3 text-sm font-medium text-gray-900 dark:text-white"><?= htmlspecialchars($product->designation) ?></td>
-                                <td class="px-2 py-3 text-sm text-right <?= (isset($product->expiry_date) && strtotime($product->expiry_date) < time()) ? 'text-red-600 font-bold' : 'text-orange-500' ?>">
-                                    <?= isset($product->expiry_date) ? date('d/m/Y', strtotime($product->expiry_date)) : '-' ?>
+                                <td class="px-2 py-3 text-sm text-right">
+                                    <?php 
+                                    $class = 'expiry-safe';
+                                    if (isset($product->expiry_date)) {
+                                        $date = strtotime($product->expiry_date);
+                                        $now = time();
+                                        $diff = $date - $now;
+                                        $threeMonths = 3 * 30 * 24 * 60 * 60;
+                                        $sixMonths = 6 * 30 * 24 * 60 * 60;
+
+                                        if ($date < $now) $class = 'expiry-expired';
+                                        elseif ($diff <= $threeMonths) $class = 'expiry-critical';
+                                        elseif ($diff <= $sixMonths) $class = 'expiry-warning';
+                                    }
+                                    ?>
+                                    <span class="<?= $class ?>">
+                                        <?= isset($product->expiry_date) ? date('d/m/Y', strtotime($product->expiry_date)) : '-' ?>
+                                    </span>
                                 </td>
                             </tr>
                             <?php endforeach; ?>
