@@ -124,12 +124,23 @@
                 <li>
                     <a href="<?= url('/reports') ?>"
                         class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'reports') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600 dark:text-blue-400"
-                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <span class="ml-3 sidebar-text">Rapports</span>
+                        <div class="relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600 dark:text-blue-400"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <?php 
+                            $expiredCount = \App\Models\Product::whereNotNull('expiry_date')->where('expiry_date', '<', date('Y-m-d'))->count();
+                            if ($expiredCount > 0): 
+                            ?>
+                            <span class="absolute -top-2 -right-2 flex h-4 w-4">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-4 w-4 bg-red-600 text-[10px] text-white items-center justify-center font-bold"><?= $expiredCount ?></span>
+                            </span>
+                            <?php endif; ?>
+                        </div>
+                        <span class="ml-3 sidebar-text">Rapports & Alertes</span>
                     </a>
                 </li>
 
@@ -172,56 +183,3 @@
         <!-- Effet de flou pour le contenu principal -->
         <div id="contentBlur" class="fixed inset-0 z-40 hidden backdrop-blur-sm md:hidden"></div>
     </div>
- 
-
-    <script>
-
-        const sidebar = document.getElementById('sidebar');
-        const sidebarTrigger = document.getElementById('mobileSidebarTrigger');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const contentBlur = document.getElementById('contentBlur');
-
-
-        sidebarTrigger.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-            contentBlur.classList.remove('hidden');
-            document.body.classList.add('overflow-hidden');
-        });
-
-        function closeMobileSidebar() {
-            sidebar.classList.add('-translate-x-full');
-            contentBlur.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        }
-
-        closeSidebar.addEventListener('click', closeMobileSidebar);
-        contentBlur.addEventListener('click', closeMobileSidebar);
-
-
-        document.querySelectorAll('#sidebar a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    closeMobileSidebar();
-                }
-            });
-        });
-    </script>
-
-    <style>
-        #sidebar {
-            transition: transform 0.3s ease-out, box-shadow 0.3s ease;
-        }
-
-        #contentBlur {
-            transition: opacity 0.3s ease;
-        }
-
-        @media (min-width: 768px) {
-
-            #mobileSidebarTrigger,
-            #closeSidebar,
-            #contentBlur {
-                display: none;
-            }
-        }
-    </style>

@@ -1,6 +1,34 @@
 .sidebar-text {
     animation: fadeIn 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
 }
+
+/* Sidebar Mini Styles */
+@media (min-width: 768px) {
+    #sidebar.sidebar-mini {
+        width: 5rem !important; /* w-20 */
+    }
+
+    #sidebar.sidebar-mini .sidebar-text {
+        display: none !important;
+    }
+
+    #sidebar.sidebar-mini h1 span {
+        display: none !important;
+    }
+    
+    #sidebar.sidebar-mini a {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    #sidebar.sidebar-mini a svg {
+        margin-left: 0;
+    }
+}
+
 
 /* Fix Autofill background color */
 input:-webkit-autofill,

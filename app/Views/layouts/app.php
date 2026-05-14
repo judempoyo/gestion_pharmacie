@@ -21,7 +21,7 @@
         <div class="flex flex-col flex-1 overflow-hidden h-screeno">
             <?php include __DIR__ . '/../partials/header.php'; ?>
 
-            <main class="flex-1 p-8 overflow-y-auto pt-20">
+            <main class="flex-1 p-8 overflow-y-auto">
 
                 <?= $content ?>
                 <!-- Bouton Retour (conditionnel) -->

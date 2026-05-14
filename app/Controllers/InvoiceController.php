@@ -122,47 +122,72 @@ class InvoiceController
     {
         // Validation de base
         if (empty($_POST['customer_id'])) {
-            http_response_code(400);
-            echo "Le client est obligatoire";
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'Le client est obligatoire'];
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
             return;
         }
 
-        // Création de la facture
-        $invoice = Invoice::create([
-            'customer_id' => $_POST['customer_id'],
-            'total_amount' => 0 // Initialisé à 0, sera calculé après
-        ]);
+        if (empty($_POST['products'])) {
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'La facture doit contenir au moins un produit'];
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            return;
+        }
 
-        // Ajout des lignes de facture
-        $totalAmount = 0;
-        
-        if (!empty($_POST['products'])) {
-            foreach ($_POST['products'] as $productData) {
-                $product = Product::find($productData['id']);
-                
-                if ($product) {
-                    $lineTotal = $product->unit_price * $productData['quantity'];
-                    
-                    InvoiceLine::create([
-                        'invoice_id' => $invoice->id,
-                        'product_id' => $product->id,
-                        'quantity' => $productData['quantity'],
-                        'unit_price' => $product->unit_price
-                    ]);
-                    
-                    $totalAmount += $lineTotal;
-                }
+        // Vérification préalable de tous les produits (expiration et stock)
+        foreach ($_POST['products'] as $productData) {
+            $product = Product::find($productData['id']);
+            if (!$product) continue;
+
+            // 1. Vérifier l'expiration
+            if ($product->expiry_date && strtotime($product->expiry_date) < time()) {
+                $_SESSION['flash'] = [
+                    'type' => 'error',
+                    'message' => "Vente impossible : le produit '{$product->designation}' est périmé depuis le " . date('d/m/Y', strtotime($product->expiry_date))
+                ];
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                return;
+            }
+
+            // 2. Vérifier le stock
+            if ($product->quantity < $productData['quantity']) {
+                $_SESSION['flash'] = [
+                    'type' => 'error',
+                    'message' => "Stock insuffisant pour '{$product->designation}' (Restant: {$product->quantity})"
+                ];
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                return;
             }
         }
 
-        // Mise à jour du montant total
+        // Création de la facture si tout est OK
+        $invoice = Invoice::create([
+            'customer_id' => $_POST['customer_id'],
+            'total_amount' => 0
+        ]);
+
+        $totalAmount = 0;
+        foreach ($_POST['products'] as $productData) {
+            $product = Product::find($productData['id']);
+            if ($product) {
+                $lineTotal = $product->unit_price * $productData['quantity'];
+                
+                InvoiceLine::create([
+                    'invoice_id' => $invoice->id,
+                    'product_id' => $product->id,
+                    'quantity' => $productData['quantity'],
+                    'unit_price' => $product->unit_price
+                ]);
+
+                // Déduire du stock
+                $product->decrement('quantity', $productData['quantity']);
+                
+                $totalAmount += $lineTotal;
+            }
+        }
+
         $invoice->update(['total_amount' => $totalAmount]);
 
-        $_SESSION['flash'] = [
-            'type' => 'success',
-            'message' => 'Facture créée avec succès'
-        ];
-        
+        $_SESSION['flash'] = ['type' => 'success', 'message' => 'Vente enregistrée avec succès'];
         header('Location: ' . $this->basePath . '/invoice');
     }
 

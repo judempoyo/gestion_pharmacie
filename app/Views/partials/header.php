@@ -1,4 +1,4 @@
-<header class="flex items-center grid grid-cols-5 px-6 py-4 bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 fixed w-full z-40 backdrop-blur supports-[backdrop-filter]:bg-white/60 supports-[backdrop-filter]:dark:bg-zinc-900/60">
+<header class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/60 supports-[backdrop-filter]:dark:bg-zinc-900/60">
     <!-- Partie gauche avec titre -->
     <div class="col-span-4 items-center">
         <button id="mobileSidebarTrigger" class="md:hidden text-gray-500 dark:text-gray-400 mr-4">
