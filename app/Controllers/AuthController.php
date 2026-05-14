@@ -19,7 +19,7 @@ class AuthController
     {
         $this->session = new SessionManager();
         $this->session->start();
-        $this->basePath = '/Projets/autres/gestion_pharmacie/public';
+        $this->basePath = BASE_URL_PATH;
     }
 
     // Afficher le formulaire de connexion

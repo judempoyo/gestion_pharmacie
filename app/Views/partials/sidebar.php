@@ -44,9 +44,9 @@
             <ul class="space-y-2">
                 <!-- Tableau de bord -->
                 <li class="mt-6">
-                    <a href="<?= PUBLIC_URL ?>"
-                        class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= ($_SERVER['REQUEST_URI'] === '/Projets/autres/gestion_pharmacie/public/') ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
-                        <svg class="w-6 h-6 <?= ($_SERVER['REQUEST_URI'] === '/Projets/autres/gestion_pharmacie/public/') ? 'text-teal-500' : 'text-gray-500 group-hover:text-teal-500 dark:text-gray-400' ?>"
+                    <a href="<?= url('/dashboard') ?>"
+                        class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], '/dashboard') !== false || $_SERVER['REQUEST_URI'] === $basePath . '/') ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
+                        <svg class="w-6 h-6 <?= (strpos($_SERVER['REQUEST_URI'], '/dashboard') !== false || $_SERVER['REQUEST_URI'] === $basePath . '/') ? 'text-teal-500' : 'text-gray-500 group-hover:text-teal-500 dark:text-gray-400' ?>"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -57,7 +57,7 @@
 
         
                 <li>
-                    <a href="<?= PUBLIC_URL ?>product"
+                    <a href="<?= url('/product') ?>"
                         class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'product') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-green-600 dark:text-green-400"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,7 +70,7 @@
 
                 <!-- Ventes -->
                 <li>
-                    <a href="<?= PUBLIC_URL ?>invoice"
+                    <a href="<?= url('/invoice') ?>"
                         class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'invoice') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-purple-600 dark:text-purple-400"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,21 +83,21 @@
 
                 <!-- Bons de commande -->
                 <li>
-                    <a href="<?= PUBLIC_URL ?>purchase"
+                    <a href="<?= url('/purchase') ?>"
                         class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'purchase') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-yellow-600 dark:text-yellow-400"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
-                        <span class="ml-3 sidebar-text">Bons de commande</span>
+                        <span class="ml-3 sidebar-text">Achats</span>
                     </a>
                 </li>
 
                 <!-- Clients -->
                 <li>
-                    <a href="<?= PUBLIC_URL ?>customer"
-                        class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'custommer') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
+                    <a href="<?= url('/customer') ?>"
+                        class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'customer') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-pink-600 dark:text-pink-400"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -109,7 +109,7 @@
 
                 <!-- Fournisseurs -->
                 <li>
-                    <a href="<?= PUBLIC_URL ?>supplier"
+                    <a href="<?= url('/supplier') ?>"
                         class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'supplier') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -117,6 +117,19 @@
                                 d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
                         <span class="ml-3 sidebar-text">Fournisseurs</span>
+                    </a>
+                </li>
+
+                <!-- Rapports -->
+                <li>
+                    <a href="<?= url('/reports') ?>"
+                        class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'reports') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-600 dark:text-blue-400"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span class="ml-3 sidebar-text">Rapports</span>
                     </a>
                 </li>
 
@@ -129,7 +142,7 @@
 
                     <!-- Profil -->
                     <li>
-                        <a href="<?= PUBLIC_URL ?>profile"
+                        <a href="<?= url('/profile') ?>"
                             class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'profile') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-teal-600 dark:text-teal-400"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -142,7 +155,7 @@
 
                     <!-- Déconnexion -->
                     <li>
-                        <a href="<?= PUBLIC_URL ?>logout"
+                        <a href="<?= url('/logout') ?>"
                             class="flex items-center p-2 transition-colors duration-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 group <?= (strpos($_SERVER['REQUEST_URI'], 'logout') !== false) ? 'bg-teal-50 text-teal-700 dark:bg-gray-700 dark:text-teal-400' : 'text-gray-700 dark:text-gray-300' ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-600 dark:text-red-400"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">

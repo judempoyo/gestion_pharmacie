@@ -17,7 +17,7 @@ class InvoiceController
 
     public function __construct()
     {
-        $this->basePath = '/Projets/autres/gestion_pharmacie/public';
+        $this->basePath = BASE_URL_PATH;
     }
 
   public function index()

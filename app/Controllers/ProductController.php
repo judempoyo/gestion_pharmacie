@@ -13,7 +13,7 @@ class ProductController
 
     public function __construct()
     {
-        $this->basePath = '/Projets/autres/gestion_pharmacie/public';
+        $this->basePath = BASE_URL_PATH;
     }
 
     public function index()
@@ -24,7 +24,7 @@ class ProductController
     $direction = $_GET['direction'] ?? 'asc';
     $search = $_GET['search'] ?? '';
 
-    $allowedSorts = ['id', 'designation', 'quantity', 'unit_price'];
+    $allowedSorts = ['id', 'designation', 'quantity', 'unit_price', 'expiry_date'];
     $allowedDirections = ['asc', 'desc'];
 
     if (!in_array($sort, $allowedSorts))
@@ -59,6 +59,7 @@ class ProductController
         ->addColumn((new DataColumn('designation', 'Désignation'))->searchable())
         ->addColumn((new DataColumn('quantity', 'Quantité'))->sortable())
         ->addColumn((new DataColumn('unit_price', 'Prix Unitaire'))->sortable())
+        ->addColumn((new DataColumn('expiry_date', 'Péremption'))->sortable())
         ->addAction(DataAction::edit('Modifier', fn($item) => $this->basePath . '/product/' . 'edit/' . $item['id']))
         ->addAction(DataAction::delete('Supprimer', fn($item) => $this->basePath . '/product/' . 'delete/' . $item['id']))
         ->data($products)
@@ -90,32 +91,16 @@ class ProductController
         $data = [
             'designation' => trim($_POST['designation']),
             'quantity' => trim($_POST['quantity']),
-            'unit_price' => trim($_POST['unit_price'])
+            'unit_price' => trim($_POST['unit_price']),
+            'expiry_date' => !empty($_POST['expiry_date']) ? $_POST['expiry_date'] : null,
         ];
 
         // Validation
         if (empty($data['designation'])) {
-            http_response_code(400);
-            echo "La désignation est obligatoire";
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'La désignation est obligatoire'];
+            header('Location: ' . $this->basePath . '/product/create');
             return;
         }
-        if (empty($data['unit_price'])) {
-            http_response_code(400);
-            echo "Le prix unitaire est obligatoire";
-            return;
-        }
-
-        // Handle image upload
-       /*  if (!empty($_FILES['image']['name'])) {
-            $uploadResult = $this->handleImageUpload();
-            if ($uploadResult['success']) {
-                $data['image_url'] = $uploadResult['path'];
-            } else {
-                http_response_code(400);
-                echo $uploadResult['error'];
-                return;
-            }
-        } */
 
         Product::create($data);
 
@@ -154,35 +139,15 @@ class ProductController
         $data = [
             'designation' => trim($_POST['designation']),
             'quantity' => trim($_POST['quantity']),
-            'unit_price' => trim($_POST['unit_price'])
+            'unit_price' => trim($_POST['unit_price']),
+            'expiry_date' => !empty($_POST['expiry_date']) ? $_POST['expiry_date'] : null,
         ];
 
         if (empty($data['designation'])) {
-            http_response_code(400);
-            echo "La désignation est obligatoire";
+            $_SESSION['flash'] = ['type' => 'error', 'message' => 'La désignation est obligatoire'];
+            header('Location: ' . $this->basePath . '/product/edit/' . $id);
             return;
         }
-        if (empty($data['unit_price'])) {
-            http_response_code(400);
-            echo "Le prix unitaire est obligatoire";
-            return;
-        }
-
-        /* // Handle image upload if new image is provided
-        if (!empty($_FILES['image']['name'])) {
-            $uploadResult = $this->handleImageUpload();
-            if ($uploadResult['success']) {
-                // Delete old image if exists
-                if ($product->image_url && file_exists($product->image_url)) {
-                    unlink($product->image_url);
-                }
-                $data['image_url'] = $uploadResult['path'];
-            } else {
-                http_response_code(400);
-                echo $uploadResult['error'];
-                return;
-            }
-        } */
 
         $product->update($data);
         $_SESSION['flash'] = [
@@ -202,17 +167,13 @@ class ProductController
             return;
         }
 
-        // Delete associated image if exists
-        if ($product->image_url && file_exists($product->image_url)) {
-            unlink($product->image_url);
-        }
-
         $product->delete();
         $_SESSION['flash'] = [
             'type' => 'success',
             'message' => 'Produit supprimé avec succès'
         ];
         header('Location: ' . $this->basePath . '/product');
+    }oduct');
     }
 
     public function export()

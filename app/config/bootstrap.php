@@ -9,9 +9,23 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 // Configuration de base
 define('BASE_PATH', realpath(__DIR__ . '/..'));
 define('PUBLIC_PATH', BASE_PATH . '/public/');
-define('PUBLIC_URL', 'http://jump.localhost/Projets/autres/gestion_pharmacie/public/');
 
+// Détection automatique du chemin de base pour le routage
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '/index.php';
+$basePath = str_replace('/index.php', '', $scriptName);
+define('BASE_URL_PATH', $basePath);
 
+// S'assurer que PUBLIC_URL se termine par un slash
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+define('PUBLIC_URL', $protocol . '://' . $host . $basePath . '/');
+
+// Fonction helper pour générer des URLs
+if (!function_exists('url')) {
+    function url($path = '') {
+        return rtrim(PUBLIC_URL, '/') . '/' . ltrim($path, '/');
+    }
+}
 
 use FastRoute\RouteCollector;
 use App\Controllers\CustomerController;
@@ -22,6 +36,7 @@ use App\Controllers\SupplierController;
 use App\Controllers\AuthController;
 use App\Controllers\UserController;
 use App\Controllers\DashboardController;
+use App\Controllers\ReportController;
 use Illuminate\Pagination\Paginator;
 
 // Initialiser la pagination
@@ -33,16 +48,12 @@ Paginator::currentPageResolver(function ($pageName = 'page') {
     return isset($_GET[$pageName]) ? $_GET[$pageName] : 1;
 });
 
-$basePath = '/Projets/autres/gestion_pharmacie/public'; // Chemin de base de votre projet
-
-
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
 $dotenv->load();
 
 // Ajouter le chemin de base à vos routes
 $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($basePath) {
   
-
   $r->addRoute('GET', $basePath . '/customer', [CustomerController::class, 'index']);
   $r->addRoute('GET', $basePath . '/customer/create', [CustomerController::class, 'create']);
   $r->addRoute('POST', $basePath . '/customer/store', [CustomerController::class, 'store']);
@@ -93,9 +104,9 @@ $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) use ($base
   $r->addRoute('GET', $basePath . '/register', [AuthController::class, 'showRegisterForm']);
   $r->addRoute('POST', $basePath . '/register', [AuthController::class, 'register']);
   $r->addRoute('GET', $basePath . '/profile', [UserController::class, 'showProfile']);
-$r->addRoute('POST', $basePath . '/profile/update-info', [UserController::class, 'updateProfileInfo']);
-$r->addRoute('POST', $basePath . '/profile/update-password', [UserController::class, 'updateProfilePassword']);
-$r->addRoute('POST', $basePath . '/profile/delete', [UserController::class, 'deleteProfile']);
+  $r->addRoute('POST', $basePath . '/profile/update-info', [UserController::class, 'updateProfileInfo']);
+  $r->addRoute('POST', $basePath . '/profile/update-password', [UserController::class, 'updateProfilePassword']);
+  $r->addRoute('POST', $basePath . '/profile/delete', [UserController::class, 'deleteProfile']);
   $r->addRoute('GET', $basePath . '/logout', [AuthController::class, 'logout']);
   $r->addRoute('GET', $basePath . '/forgot-password', [AuthController::class, 'showForgotPasswordForm']);
   $r->addRoute('POST', $basePath . '/forgot-password', [AuthController::class, 'sendResetLinkEmail']);
@@ -103,6 +114,8 @@ $r->addRoute('POST', $basePath . '/profile/delete', [UserController::class, 'del
   $r->addRoute('POST', $basePath . '/reset-password', [AuthController::class, 'resetPassword']);
 
   $r->addRoute('GET', $basePath . '/dashboard', [DashboardController::class, 'index']);
+  $r->addRoute('GET', $basePath . '/reports', [ReportController::class, 'index']);
+  $r->addRoute('GET', $basePath . '/reports/export', [ReportController::class, 'exportCsv']);
 });
 
 

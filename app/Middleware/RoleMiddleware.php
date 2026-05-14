@@ -12,7 +12,7 @@ class RoleMiddleware
     public function __construct(SessionManager $session)
     {
         $this->session = $session;
-        $this->basePath = '/Projets/autres/gestion_pharmacie/public';
+        $this->basePath = BASE_URL_PATH;
 
     }
 

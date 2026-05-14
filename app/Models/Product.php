@@ -12,6 +12,7 @@ class Product extends Model
         'designation',
         'quantity',
         'unit_price',
+        'expiry_date',
         'image_url'
     ];
 

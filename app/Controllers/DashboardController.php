@@ -17,7 +17,7 @@ class DashboardController
 
     public function __construct()
     {
-        $this->basePath = '/Projets/autres/gestion_pharmacie/public';
+        $this->basePath = BASE_URL_PATH;
     }
 
     public function index()
@@ -27,6 +27,12 @@ class DashboardController
             'totalProducts' => Product::count(),
             'criticalStock' => Product::where('quantity', '<', 5)->count(),
             'outOfStock' => Product::where('quantity', '<=', 0)->count(),
+            'expiredProducts' => Product::where('expiry_date', '<', Carbon::now()->toDateString())->count(),
+            'nearExpiry' => Product::whereBetween('expiry_date', [
+                Carbon::now()->toDateString(),
+                Carbon::now()->addMonths(3)->toDateString()
+            ])->count(),
+            
             'monthlySales' => Invoice::whereBetween('created_at', [
                 Carbon::now()->startOfMonth(),
                 Carbon::now()->endOfMonth()
@@ -40,6 +46,13 @@ class DashboardController
             'lowStockProducts' => Product::where('quantity', '<', 5)
                 ->orderBy('quantity')
                 ->limit(10)
+                ->get(),
+
+            // Produits proches de la péremption
+            'expiringProducts' => Product::whereNotNull('expiry_date')
+                ->where('expiry_date', '<', Carbon::now()->addMonths(6)->toDateString())
+                ->orderBy('expiry_date', 'asc')
+                ->limit(5)
                 ->get(),
                 
             // Dernières ventes

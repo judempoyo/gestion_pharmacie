@@ -27,15 +27,20 @@
                 <!-- Bouton Retour (conditionnel) -->
                 <?php
                 $currentRoute = $_SERVER['REQUEST_URI'];
+                // Extraire le chemin sans le query string
+                $currentPath = parse_url($currentRoute, PHP_URL_PATH);
 
-                $hideBackButton = in_array($currentRoute, [
-                    '/Projets/autres/gestion_pharmacie/public/dashboard',
-                    '/Projets/autres/gestion_pharmacie/public/customer',
-                    '/Projets/autres/gestion_pharmacie/public/booking',
+                $hideBackButton = in_array($currentPath, [
+                    url('/dashboard'),
+                    url('/customer'),
+                    url('/product'),
+                    url('/supplier'),
+                    url('/invoice'),
+                    url('/purchase'),
                 ]);
 
                 if (!$hideBackButton): ?>
-                    <button onclick="goBack() "
+                    <button onclick="history.back()"
                         class="mb-4 p-2 bg-teal-500 text-white rounded-lg cursor-pointer hover:bg-teal-600">
                         Retour
                     </button>
@@ -48,7 +53,7 @@
 
 
 
-    <script src="<?= PUBLIC_URL ?>js/main.js"></script>
+    <script src="<?= url('js/main.js') ?>"></script>
     <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/script-name.js"></script>
 
 </body>
